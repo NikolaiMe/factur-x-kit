@@ -5,10 +5,9 @@ import { validateXML } from 'xmllint-wasm'
 
 import { parseXML } from '../src/core/xml.js'
 import { FacturX } from '../src/index.js'
-import { isXmlMinimumProfile } from '../src/profiles/minimum/minimum.guard.js'
-import { MinimumProfile, XmlMinimumProfile } from '../src/profiles/minimum/minimum.js'
-import { CountryIDContentType, DOCUMENT_CODES } from '../src/types/qdt/types.js'
-import { CURRENCY_ID } from '../src/types/udt/types.js'
+import { MinimumProfile } from '../src/profiles/minimum/MinimumProfile.js'
+import { MinimumProfileXml, isMinimumProfileXml } from '../src/profiles/minimum/MinimumProfileXml.js'
+import { CURRENCY_ID, CountryIDContentType, DOCUMENT_CODES } from '../src/types/qdt/types.js'
 
 const testObj: MinimumProfile = {
     meta: {
@@ -18,13 +17,14 @@ const testObj: MinimumProfile = {
     document: {
         id: 'RE20248731',
         type: DOCUMENT_CODES.COMMERCIAL_INVOICE,
-        dateOfIssue: new Date(2024, 10, 20)
+        dateOfIssue: new Date(2024, 10, 20),
+        currency: CURRENCY_ID.Euro
     },
     seller: {
         name: 'ZUGFeRD AG',
         specifiedLegalOrganization: {
             id: 'ZUGFERDAG',
-            schemeId: '0002'
+            scheme: '0002'
         },
         postalAddress: {
             country: CountryIDContentType.GERMANY
@@ -39,30 +39,28 @@ const testObj: MinimumProfile = {
         name: 'FACTURX AG',
         specifiedLegalOrganization: {
             id: 'FACTURXAG',
-            schemeId: '0003'
+            scheme: '0003'
         },
         orderReference: 'ORD123456'
     },
-    monetarySummary: {
-        currency: CURRENCY_ID.Euro,
-        taxCurrency: CURRENCY_ID.Euro,
-        sumWithoutTax: 200,
-        tax: 38,
-        grandTotal: 238,
-        openAmount: 238
+    totals: {
+        netTotal: { amount: 200 },
+        taxTotal: { amount: 38, currency: CURRENCY_ID.Euro },
+        grossTotal: { amount: 238 },
+        dueTotal: { amount: 238 }
     }
 }
 
-let xmlObject: XmlMinimumProfile
+let xmlObject: MinimumProfileXml
 let facturX: FacturX
 
 beforeAll(async () => {
-    facturX = new FacturX(testObj, 'MINIMUM')
+    facturX = await FacturX.fromObject(testObj)
 
     const xml = await facturX.getXML()
     const obj = parseXML(xml)
 
-    if (!isXmlMinimumProfile(obj)) throw new Error('Conversion to XML Obj failed')
+    if (!isMinimumProfileXml(obj)) throw new Error('Conversion to XML Obj failed')
 
     xmlObject = obj
 })

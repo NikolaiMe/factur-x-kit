@@ -76,5 +76,10 @@ export const ZMinimumProfileXml = z.object({
 export type MinimumProfileXml = z.infer<typeof ZMinimumProfileXml>
 
 export function isMinimumProfileXml(data: unknown): data is MinimumProfileXml {
-    return ZMinimumProfileXml.safeParse(data).success
+    const result = ZMinimumProfileXml.safeParse(data)
+
+    if (!result.success) {
+        console.log(result.error.errors)
+    }
+    return result.success
 }

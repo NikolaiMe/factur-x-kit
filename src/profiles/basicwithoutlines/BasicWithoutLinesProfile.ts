@@ -3,8 +3,8 @@ import { z } from 'zod'
 import { ZSpecifiedTaxRegistrationsType } from '../../types/ram/SpecifiedTaxRegistrationsTypeConverter.js'
 import { ZNoteType } from '../../types/ram/index.js'
 import { ZDateTimeType } from '../../types/udt/DateTimeTypeConverter.js'
-import { ZIdType } from '../../types/udt/IdTypeConverter.js'
-import { ZIdTypeWithScheme } from '../../types/udt/IdTypeWithSchemeConverter.js'
+import { ZIdType } from '../../types/udt/IdTypeConverter'
+import { ZIdTypeWithScheme } from '../../types/udt/IdTypeWithSchemeConverter'
 import { ZTextType } from '../../types/udt/TextTypeConverter.js'
 
 const ZTradePartyType = z.object({
