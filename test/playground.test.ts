@@ -6,7 +6,8 @@ import { printNode, zodToTs } from 'zod-to-ts';
 
 import { ZComfortProfileStructure_modified } from '../src/adapter/totalsCalculator/easyInputType';
 import { FacturX } from '../src/core/factur-x';
-import { dinA4Width, mmToPt } from '../src/pdfTemplates/types';
+import { HeaderImageFileType } from '../src/pdfTemplates/invoiceBlocks/headerImage';
+import { HeaderImageType, dinA4Width, mmToPt } from '../src/pdfTemplates/types';
 import { ZBasicProfile } from '../src/profiles/basic/BasicProfile';
 import { ZMinimumProfile } from '../src/profiles/minimum';
 import { designTestObject } from './design_test_object';
@@ -87,8 +88,11 @@ describe('pdf-creation', () => {
         const projectRoot = process.cwd();
         const imagePath = path.join(projectRoot, 'assets', 'images', 'test_header', 'header.jpg');
 
-        const headerImage = {
-            path: imagePath,
+        const imageBytes = await fs.readFile(imagePath);
+
+        const headerImage: HeaderImageType = {
+            buffer: imageBytes,
+            dataType: 'jpg',
             dimensions: {
                 width: dinA4Width * mmToPt,
                 height: ((dinA4Width * mmToPt) / 1408) * 504

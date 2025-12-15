@@ -1,8 +1,7 @@
 import objectPath from 'object-path';
 import { PDFDocument } from 'pdf-lib';
 
-import { ImageDimensions } from '../pdfTemplates/invoiceBlocks/headerImage';
-import { FacturXKitPDFTemplate, SupportedLocales } from '../pdfTemplates/types';
+import { FacturXKitPDFTemplate, HeaderImageType, SupportedLocales } from '../pdfTemplates/types';
 import { BasicProfile, isBasicProfile } from '../profiles/basic/BasicProfile';
 import { BasicProfileConverter } from '../profiles/basic/BasicProfileConverter';
 import {
@@ -106,10 +105,7 @@ export class FacturX {
         pdfLibDocument?: PDFDocument | null;
         pdfTemplate?: FacturXKitPDFTemplate;
         locale?: SupportedLocales;
-        headerImage?: {
-            path: string;
-            dimensions: ImageDimensions;
-        };
+        headerImage?: HeaderImageType;
     }): Promise<Uint8Array> {
         if (options?.existingNonConformantPdf) {
             this._pdf = await FacturXPdf.createFromNonCompliantPDF(options?.existingNonConformantPdf);
