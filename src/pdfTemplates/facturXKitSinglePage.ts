@@ -9,7 +9,7 @@ import { dataUrlToUint8Array } from '../helper/calculation';
 import { facturXKitMultiPage } from './facturXKitMultiPage';
 import { addCustomerAddressBlock } from './invoiceBlocks/customerAddressBlock';
 import { addFooter } from './invoiceBlocks/footerBlock';
-import { ImageDimensions, addHeaderImage } from './invoiceBlocks/headerImage';
+import { HeaderImageFileType, ImageDimensions, addHeaderImage } from './invoiceBlocks/headerImage';
 import { addIntroTextBlock } from './invoiceBlocks/introTextBlock';
 import { addItemTable } from './invoiceBlocks/itemTable/itemTable';
 import { addMetaBlock } from './invoiceBlocks/metaDataBlock';
@@ -24,8 +24,9 @@ export async function facturXKitSinglePage(
     pdfDoc: PDFDocument,
     locale: SupportedLocales,
     headerImage?: {
-        path: string;
+        buffer: Buffer;
         dimensions: ImageDimensions;
+        dataType: HeaderImageFileType;
     }
 ): Promise<PDFDocument> {
     const openSansRegularBytes = await dataUrlToUint8Array(openSansRegularPath);
@@ -44,7 +45,7 @@ export async function facturXKitSinglePage(
     }
 
     if (headerImage) {
-        await addHeaderImage(headerImage.path, headerImage.dimensions, page);
+        await addHeaderImage(headerImage.buffer, headerImage.dimensions, headerImage.dataType, page);
     }
 
     await addSenderLineBlock(data, page, openSansRegular, locale);
