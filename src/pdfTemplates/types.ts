@@ -6,15 +6,17 @@ import { TranslatedTexts } from './texts/types';
 
 export type SupportedLocales = keyof TranslatedTexts<string>;
 
+export interface HeaderImageType {
+    buffer: Buffer;
+    dimensions: ImageDimensions;
+    dataType: HeaderImageFileType;
+}
+
 export type FacturXKitPDFTemplate = (
     data: availableProfiles,
     pdfDoc: PDFDocument,
     locale: SupportedLocales,
-    headerImage?: {
-        buffer: Buffer;
-        dimensions: ImageDimensions;
-        dataType: HeaderImageFileType;
-    }
+    headerImage?: HeaderImageType
 ) => Promise<PDFDocument>;
 
 export const mmToPt = 72.0 / 25.4;

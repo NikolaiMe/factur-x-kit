@@ -9,7 +9,7 @@ import { dataUrlToUint8Array } from '../helper/calculation';
 import { facturXKitMultiPage } from './facturXKitMultiPage';
 import { addCustomerAddressBlock } from './invoiceBlocks/customerAddressBlock';
 import { addFooter } from './invoiceBlocks/footerBlock';
-import { HeaderImageFileType, ImageDimensions, addHeaderImage } from './invoiceBlocks/headerImage';
+import { addHeaderImage } from './invoiceBlocks/headerImage';
 import { addIntroTextBlock } from './invoiceBlocks/introTextBlock';
 import { addItemTable } from './invoiceBlocks/itemTable/itemTable';
 import { addMetaBlock } from './invoiceBlocks/metaDataBlock';
@@ -17,17 +17,13 @@ import { addMonetarySummary } from './invoiceBlocks/monetarySummary';
 import { addOutroTextBlock } from './invoiceBlocks/outroTextBlock';
 import { addSenderLineBlock } from './invoiceBlocks/senderLineBlock';
 import { addTitleBlock } from './invoiceBlocks/titleBlock';
-import { SupportedLocales, mmToPt } from './types';
+import { HeaderImageType, SupportedLocales, mmToPt } from './types';
 
 export async function facturXKitSinglePage(
     data: availableProfiles,
     pdfDoc: PDFDocument,
     locale: SupportedLocales,
-    headerImage?: {
-        buffer: Buffer;
-        dimensions: ImageDimensions;
-        dataType: HeaderImageFileType;
-    }
+    headerImage?: HeaderImageType
 ): Promise<PDFDocument> {
     const openSansRegularBytes = await dataUrlToUint8Array(openSansRegularPath);
     const openSansBoldBytes = await dataUrlToUint8Array(openSansBoldPath);

@@ -17,8 +17,7 @@ import {
 import iccProfilePath from '../../assets/iccprofile/sRGB2014.icc';
 import { dataUrlToUint8Array } from '../helper/calculation';
 import { facturXKitSinglePage } from '../pdfTemplates/facturXKitSinglePage';
-import { ImageDimensions } from '../pdfTemplates/invoiceBlocks/headerImage';
-import { FacturXKitPDFTemplate, SupportedLocales } from '../pdfTemplates/types';
+import { FacturXKitPDFTemplate, HeaderImageType, SupportedLocales } from '../pdfTemplates/types';
 import { availableProfiles } from './factur-x';
 
 /**This interface is copied from pdf-lib (see src/core/embedders/FileEmbedder.ts),
@@ -96,10 +95,7 @@ export default class FacturXPdf {
         data: availableProfiles,
         template?: FacturXKitPDFTemplate,
         locale?: SupportedLocales,
-        headerImage?: {
-            path: string;
-            dimensions: ImageDimensions;
-        }
+        headerImage?: HeaderImageType
     ): Promise<void> {
         //TODO: Correct implementation of PDF Invoice
         if (!template) {
