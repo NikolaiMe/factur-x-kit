@@ -6,7 +6,8 @@ import { printNode, zodToTs } from 'zod-to-ts';
 
 import { ZComfortProfileStructure_modified } from '../src/adapter/totalsCalculator/easyInputType';
 import { FacturX } from '../src/core/factur-x';
-import { dinA4Width, mmToPt } from '../src/pdfTemplates/types';
+import { HeaderImageFileType } from '../src/pdfTemplates/invoiceBlocks/headerImage';
+import { HeaderImageType, dinA4Width, mmToPt } from '../src/pdfTemplates/types';
 import { ZBasicProfile } from '../src/profiles/basic/BasicProfile';
 import { ZMinimumProfile } from '../src/profiles/minimum';
 import { designTestObject } from './design_test_object';
@@ -16,7 +17,7 @@ import './profiles/codeDb/xPathDocumentFunction';
 
 // This is just a testcase which helps me printing out the ts-objects which are built from the zod types
 
-describe.only('playground', () => {
+describe('playground', () => {
     it('shall run', () => {
         const identifier = 'basicwl';
         const { node } = zodToTs(ZComfortProfileStructure_modified, identifier);
@@ -87,8 +88,12 @@ describe('pdf-creation', () => {
         const projectRoot = process.cwd();
         const imagePath = path.join(projectRoot, 'assets', 'images', 'test_header', 'header.jpg');
 
-        const headerImage = {
-            path: imagePath,
+        const imageBuffer = await fs.readFile(imagePath);
+        const imageUint8Array = new Uint8Array(imageBuffer);
+
+        const headerImage: HeaderImageType = {
+            imageBytes: imageUint8Array,
+            dataType: 'jpg',
             dimensions: {
                 width: dinA4Width * mmToPt,
                 height: ((dinA4Width * mmToPt) / 1408) * 504

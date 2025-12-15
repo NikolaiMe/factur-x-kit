@@ -1,6 +1,6 @@
 {
     "name": "factur-x-kit",
-    "version": "0.1.6",
+    "version": "0.2.0",
     "description": "Read and Write Hybrid Invoice Documents (EN 16931 / Factur-X / ZUGFeRD / eRechnung) in Javascript / Typescript.",
     "keywords": [
         "en16931",
@@ -15,7 +15,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/NikolaiMe/factur-x-kit.git"
+        "url": "git+https://github.com/NikolaiMe/factur-x-kit.git"
     },
     "license": "MIT",
     "author": "Nikolai Merz (https://github.com/NikolaiMe)",
