@@ -15,7 +15,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/NikolaiMe/factur-x-kit.git"
+        "url": "git+https://github.com/NikolaiMe/factur-x-kit.git"
     },
     "license": "MIT",
     "author": "Nikolai Merz (https://github.com/NikolaiMe)",
