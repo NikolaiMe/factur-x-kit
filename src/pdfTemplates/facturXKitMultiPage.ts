@@ -35,7 +35,7 @@ export async function facturXKitMultiPage(
     const footerHeight = 100;
 
     if (headerImage) {
-        await addHeaderImage(headerImage.buffer, headerImage.dimensions, headerImage.dataType, page);
+        await addHeaderImage(headerImage.imageBytes, headerImage.dimensions, headerImage.dataType, page);
     }
 
     await addSenderLineBlock(data, page, openSansRegular, locale);

@@ -88,10 +88,11 @@ describe('pdf-creation', () => {
         const projectRoot = process.cwd();
         const imagePath = path.join(projectRoot, 'assets', 'images', 'test_header', 'header.jpg');
 
-        const imageBytes = await fs.readFile(imagePath);
+        const imageBuffer = await fs.readFile(imagePath);
+        const imageUint8Array = new Uint8Array(imageBuffer);
 
         const headerImage: HeaderImageType = {
-            buffer: imageBytes,
+            imageBytes: imageUint8Array,
             dataType: 'jpg',
             dimensions: {
                 width: dinA4Width * mmToPt,

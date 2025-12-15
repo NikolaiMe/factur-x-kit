@@ -41,7 +41,7 @@ export async function facturXKitSinglePage(
     }
 
     if (headerImage) {
-        await addHeaderImage(headerImage.buffer, headerImage.dimensions, headerImage.dataType, page);
+        await addHeaderImage(headerImage.imageBytes, headerImage.dimensions, headerImage.dataType, page);
     }
 
     await addSenderLineBlock(data, page, openSansRegular, locale);

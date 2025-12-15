@@ -7,7 +7,7 @@ import { TranslatedTexts } from './texts/types';
 export type SupportedLocales = keyof TranslatedTexts<string>;
 
 export interface HeaderImageType {
-    buffer: Buffer;
+    imageBytes: Uint8Array;
     dimensions: ImageDimensions;
     dataType: HeaderImageFileType;
 }

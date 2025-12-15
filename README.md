@@ -215,10 +215,11 @@ const imageWidthInPx = 1200; // add real image width in px here
 const imageHeightInPx = 500; // add real image height in px here
 const pathToImage = path.join(__dirname, 'assets', 'header.jpg'); // add real path to image file her (only png or jpg supported)
 
-const imageBytes = await fs.readFile(pathToImage);
+const imageBuffer = await fs.readFile(pathToImage);
+const imageUint8Array = new Uint8Array(imageBuffer);
 
 const headerImage = {
-    buffer: imageBytes,
+    imageBytes: imageUint8Array,
     dataType: 'jpg', // you can use 'png', 'jpg' or 'jpeg' here
     dimensions: {
         width: dinA4Width * mmToPt,

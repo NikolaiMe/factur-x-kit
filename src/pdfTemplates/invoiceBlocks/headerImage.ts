@@ -8,21 +8,19 @@ export interface ImageDimensions {
 export type HeaderImageFileType = 'png' | 'jpg' | 'jpeg';
 
 export async function addHeaderImage(
-    imageBytes: Buffer,
+    imageBytes: Uint8Array,
     dimensions: ImageDimensions,
     headerImageFileType: HeaderImageFileType,
     page: PDFPage
 ): Promise<void> {
     try {
-        const imageUint8Array = new Uint8Array(imageBytes);
-
         const pdfDoc = page.doc;
         let embeddedImage: PDFImage;
 
         if (headerImageFileType === 'png') {
-            embeddedImage = await pdfDoc.embedPng(imageUint8Array);
+            embeddedImage = await pdfDoc.embedPng(imageBytes);
         } else if (headerImageFileType === 'jpg' || headerImageFileType === 'jpeg') {
-            embeddedImage = await pdfDoc.embedJpg(imageUint8Array);
+            embeddedImage = await pdfDoc.embedJpg(imageBytes);
         } else {
             throw new Error('Unsupported image type. Only PNG and JPG/JPEG are supported.');
         }
