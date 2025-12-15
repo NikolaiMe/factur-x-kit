@@ -17,7 +17,7 @@ import './profiles/codeDb/xPathDocumentFunction';
 
 // This is just a testcase which helps me printing out the ts-objects which are built from the zod types
 
-describe.only('playground', () => {
+describe('playground', () => {
     it('shall run', () => {
         const identifier = 'basicwl';
         const { node } = zodToTs(ZComfortProfileStructure_modified, identifier);
