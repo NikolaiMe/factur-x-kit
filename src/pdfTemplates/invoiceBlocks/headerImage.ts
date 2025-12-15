@@ -1,5 +1,3 @@
-import * as fs from 'fs/promises';
-import * as path from 'path';
 import { PDFImage, PDFPage } from 'pdf-lib';
 
 export interface ImageDimensions {
@@ -7,18 +5,23 @@ export interface ImageDimensions {
     height: number;
 }
 
-export async function addHeaderImage(imagePath: string, dimensions: ImageDimensions, page: PDFPage): Promise<void> {
+export type HeaderImageFileType = 'png' | 'jpg' | 'jpeg';
+
+export async function addHeaderImage(
+    imageBytes: Buffer,
+    dimensions: ImageDimensions,
+    headerImageFileType: HeaderImageFileType,
+    page: PDFPage
+): Promise<void> {
     try {
-        const imageBytes = await fs.readFile(imagePath);
         const imageUint8Array = new Uint8Array(imageBytes);
 
         const pdfDoc = page.doc;
         let embeddedImage: PDFImage;
 
-        const fileExtension = path.extname(imagePath).toLowerCase();
-        if (fileExtension === '.png') {
+        if (headerImageFileType === 'png') {
             embeddedImage = await pdfDoc.embedPng(imageUint8Array);
-        } else if (fileExtension === '.jpg' || fileExtension === '.jpeg') {
+        } else if (headerImageFileType === 'jpg' || headerImageFileType === 'jpeg') {
             embeddedImage = await pdfDoc.embedJpg(imageUint8Array);
         } else {
             throw new Error('Unsupported image type. Only PNG and JPG/JPEG are supported.');
