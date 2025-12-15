@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [0.2.0] - 2025-12-15
+
+### Changed
+
+-   The header image for the pdf is now not a string anymore but a Uint8Array. This allows the usage of this in the browser
+
 ## [0.1.6] - 2025-09-28
 
 ### Fixed

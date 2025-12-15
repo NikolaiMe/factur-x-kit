@@ -208,15 +208,18 @@ await fs.writeFile(path.join(__dirname, 'pdfs', 'myInvoice.pdf'), pdfBytes);
 
 _**Header Image**_
 
-You can add a header image to give the invoice a personal touch. You can add .jpg or .png files as the header image. The header image will be placed in the upper right corner and will be printed in the background. You can use the `dinA4Width` and `mmToPt` constants exported by factur-x-kit to stretch the image to the full PDF width (see example below).
+You can add a header image to give the invoice a personal touch. You can add .jpg or .png files as the header image. The header image will be placed in the upper right corner and will be printed in the background. The dimension parameters 'width' and 'height' are the width and the height of the image in pdf-pt (1mm = 2,83pt). You can use the `dinA4Width` and `mmToPt` constants exported by factur-x-kit to stretch the image to the full PDF width (see example below).
 
 ```typescript
 const imageWidthInPx = 1200; // add real image width in px here
 const imageHeightInPx = 500; // add real image height in px here
-const pathToImage = path.join(__dirname, 'assets', 'header.jpg'); // add real path to image file her
+const pathToImage = path.join(__dirname, 'assets', 'header.jpg'); // add real path to image file her (only png or jpg supported)
+
+const imageBytes = await fs.readFile(pathToImage);
 
 const headerImage = {
-    path: pathToImage,
+    buffer: imageBytes,
+    dataType: 'jpg', // you can use 'png', 'jpg' or 'jpeg' here
     dimensions: {
         width: dinA4Width * mmToPt,
         height: ((dinA4Width * mmToPt) / imageWidthInPx) * imageHeightInPx
