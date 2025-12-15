@@ -1,7 +1,7 @@
 import { PDFDocument } from 'pdf-lib';
 
 import { availableProfiles } from '../core/factur-x';
-import { ImageDimensions } from './invoiceBlocks/headerImage';
+import { HeaderImageFileType, ImageDimensions } from './invoiceBlocks/headerImage';
 import { TranslatedTexts } from './texts/types';
 
 export type SupportedLocales = keyof TranslatedTexts<string>;
@@ -11,8 +11,9 @@ export type FacturXKitPDFTemplate = (
     pdfDoc: PDFDocument,
     locale: SupportedLocales,
     headerImage?: {
-        path: string;
+        buffer: Buffer;
         dimensions: ImageDimensions;
+        dataType: HeaderImageFileType;
     }
 ) => Promise<PDFDocument>;
 
