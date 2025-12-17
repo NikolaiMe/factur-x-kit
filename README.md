@@ -1,8 +1,11 @@
 # factur-x-kit
 
-[![NPM version](https://img.shields.io/npm/v/factur-x-kit.svg?style=flat-square)](https://www.npmjs.org/package/factur-x-kit)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/NikolaiMe/factur-x-kit)
+[![NPM version](https://img.shields.io/npm/v/factur-x-kit.svg?style=flat-square)](https://www.npmjs.org/package/factur-x-kit)
+
+[![Factur-X Version 1.08](https://img.shields.io/badge/factur--X_version-1.08-ED3C44?labelColor=192444)](https://fnfe-mpe.org/factur-x/factur-x_en/)
+[![ZUGFeRD Version 2.4](https://img.shields.io/badge/ZUGFeRD_version-2.4-138ECC?labelColor=B7BE2A)](https://www.ferd-net.de/standards/zugferd)
 
 An all-in-one library for Hybrid Invoice Documents (Factur-X / ZUGFeRD) for JavaScript/TypeScript. Built by developers, for developers. You don't need to be an e-invoice expert to use it; so this documentation also provides some helpful information about ZUGFeRD/Factur-X basics.
 
@@ -402,6 +405,10 @@ In current state of factur-x-kit the PDF/A-3 conformance is **not** checked if y
 ## Disclaimer
 
 This free software has been written with the greatest possible care, but like all software, it may contain errors. Use at your own risk! There is no warranty and no liability.
+
+## Changelog
+
+Can be found [here](https://github.com/NikolaiMe/factur-x-kit/blob/main/CHANGELOG.md)
 
 ## Dependencies
 

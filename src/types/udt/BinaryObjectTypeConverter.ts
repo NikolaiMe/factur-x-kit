@@ -5,14 +5,16 @@ import { MIME_CODES } from '../codes';
 
 export const ZBinaryObjectType = z.object({
     mimeCode: z.nativeEnum(MIME_CODES),
-    fileName: z.string()
+    fileName: z.string(),
+    base64Data: z.string()
 });
 
 export type BinaryObjectType = z.infer<typeof ZBinaryObjectType>;
 
 export const ZBinaryObjectTypeXml = z.object({
     '@mimeCode': z.string(),
-    '@filename': z.string()
+    '@filename': z.string(),
+    '#text': z.string()
 });
 
 export type BinaryObjectTypeXml = z.infer<typeof ZBinaryObjectTypeXml>;
@@ -26,7 +28,8 @@ export class BinaryObjectTypeConverter extends BaseTypeConverter<BinaryObjectTyp
 
         const convertedData = {
             mimeCode: data['@mimeCode'] as MIME_CODES,
-            fileName: data['@filename']
+            fileName: data['@filename'],
+            base64Data: data['#text']
         };
 
         const { success: succes_val, data: data_val } = ZBinaryObjectType.safeParse(convertedData);
@@ -46,7 +49,8 @@ export class BinaryObjectTypeConverter extends BaseTypeConverter<BinaryObjectTyp
 
         return {
             '@mimeCode': data.mimeCode,
-            '@filename': data.fileName
+            '@filename': data.fileName,
+            '#text': data.base64Data
         };
     }
 }

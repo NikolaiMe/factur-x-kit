@@ -198,15 +198,15 @@ describe('Create FacturX Instance from Object', () => {
 
     test('Builds Valid XML According to XSD Schema', async () => {
         const xsd = await fs.readFile(
-            path.join(__dirname, 'xsdSchemes', 'MINIMUM', 'Factur-X_1.07.3_MINIMUM.xsd'),
+            path.join(__dirname, 'xsdSchemes', 'MINIMUM', 'FACTUR-X_1.07.4_MINIMUM.xsd'),
             'utf-8'
         );
 
         // xs:import references need to be loaded into wasm
         const xsdImports = [
-            'Factur-X_1.07.3_MINIMUM_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
-            'Factur-X_1.07.3_MINIMUM_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
-            'Factur-X_1.07.3_MINIMUM_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
+            'FACTUR-X_MINIMUM_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
+            'FACTUR-X_MINIMUM_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
+            'FACTUR-X_MINIMUM_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
         ];
 
         const preload: { fileName: string; contents: string }[] = [];
@@ -235,7 +235,7 @@ describe('Create FacturX Instance from Object', () => {
 
     test('Builds Valid XML According to SCHEMATRON Schema', async () => {
         const schematron = (
-            await fs.readFile(path.join(__dirname, 'schematronSchemes', 'Factur-X_1.07.3_MINIMUM.sch'), 'utf-8')
+            await fs.readFile(path.join(__dirname, 'schematronSchemes', 'FACTUR-X_1.07.4_MINIMUM.sch'), 'utf-8')
         ).toString();
 
         const schema = Schema.fromString(schematron);

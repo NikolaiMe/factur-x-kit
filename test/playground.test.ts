@@ -22,7 +22,7 @@ describe('playground', () => {
         const identifier = 'basicwl';
         const { node } = zodToTs(ZComfortProfileStructure_modified, identifier);
         const nodeString = printNode(node);
-        logTypeWithComments(nodeString);
+        //logTypeWithComments(nodeString);
 
         const identifier4 = 'basic';
         const { node: node4 } = zodToTs(ZBasicProfile, identifier4);
@@ -68,7 +68,7 @@ describe('factur-x validity check', () => {
     test('Builds Valid XML According to SCHEMATRON Schema', async () => {
         const schematron = (
             await fs.readFile(
-                path.join(__dirname, 'profiles', 'schematronSchemes', 'Factur-X_1.07.3_BASICWL.sch'),
+                path.join(__dirname, 'profiles', 'schematronSchemes', 'Factur-X_1.07.4_BASIC-WL.sch'),
                 'utf-8'
             )
         ).toString();

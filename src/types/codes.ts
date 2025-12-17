@@ -176,7 +176,8 @@ export enum CURRENCY_CODES {
     ZambianKwacha = 'ZMW',
     SierraLeone = 'SLE',
     BolívarSoberanoNewValuation = 'VED',
-    ZimbabweGold = 'ZWG'
+    ZimbabweGold = 'ZWG',
+    RenminbiOffshore = 'CNH'
 }
 
 export enum UNIT_CODES {
@@ -2983,7 +2984,11 @@ export enum ISO6523_CODES {
     CPR_Danish_person_civil_registration_number = '0237',
     Plateforme_s_agreee_s_à_la_facturation_électronique_PPF_PDP = '0238',
     EAEU = '0239',
-    Register_of_legal_persons = '0240'
+    Register_of_legal_persons = '0240',
+    Name_unknown_01 = '0241',
+    OpenPeppol_Service_Provider_Identification_Scheme_SPIS = '0242',
+    Name_unknown_02 = '0243',
+    Tax_Identification_Nigeria = '0244'
 }
 
 export enum EAS_SCHEME_CODES {
@@ -3083,7 +3088,8 @@ export enum EAS_SCHEME_CODES {
     Identification_number_of_economic_subjects_ICO_Act_on_State_Statistics_of_29_November_2001_PAR_27 = '0158',
     Odette_International_Limited = '0177',
     UAE_Tax_Identification_Number_TIN = '0235',
-    Register_of_legal_persons = '0240'
+    Register_of_legal_persons = '0240',
+    Tax_Identification_Nigeria = '0244'
 }
 
 export enum TAX_CODES {
@@ -3809,7 +3815,8 @@ export enum EXEMPTION_REASON_CODES {
     Exempt_based_on_article_275_of_the_Code_Général_des_Impôts_CGI_General_tax_code = 'VATEX-FR-CGI275',
     Exempt_based_on_article_298_sexdecies_A_of_the_Code_Général_des_Impôts_CGI_General_tax_code = 'VATEX-FR-298SEXDECIESA',
     Exempt_based_on_article_295_of_the_Code_Général_des_Impôts_CGI_General_tax_code = 'VATEX-FR-CGI295',
-    Exempt_based_on_2_of_article_283_of_the_Code_Général_des_Impôts_CGI_General_tax_code = 'VATEX-FR-AE'
+    Exempt_based_on_2_of_article_283_of_the_Code_Général_des_Impôts_CGI_General_tax_code = 'VATEX-FR-AE',
+    Exempt_based_on_article_135_section_1_of_Council_Directive_2006_112_EC = 'VATEX-EU-135-1'
 }
 
 export enum UNTDID_7143 {
