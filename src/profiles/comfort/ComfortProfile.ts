@@ -36,6 +36,7 @@ import { BR_O } from '../businessRules/br_o';
 import { BR_OWN } from '../businessRules/br_own';
 import { BR_S } from '../businessRules/br_s';
 import { BR_Z } from '../businessRules/br_z';
+import { CII_SR } from '../businessRules/cii_sr';
 import { validationResult } from '../convert';
 
 export const ZComfortTotalsType = z.object({
@@ -170,7 +171,8 @@ export const ZComfortProfile = [
     ...BR_IP,
     ...BR_O,
     ...BR_S,
-    ...BR_Z
+    ...BR_Z,
+    ...CII_SR
 ].reduce<z.ZodTypeAny>((schema, rule) => schema.refine(rule.rule, rule.error), ZComfortProfileStructure);
 
 export function isComfortProfile(data: unknown): data is ComfortProfile {
