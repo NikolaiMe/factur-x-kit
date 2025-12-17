@@ -718,6 +718,7 @@ describe('Build and check XML', () => {
     test('Build XML succeeds', async () => {
         const convertedXML = await instance.getXML();
         expect(convertedXML).toBeDefined();
+        await fs.writeFile(path.join(__dirname, 'xml', 'createdXml', 'Comfort_Test.xml'), convertedXML);
     });
 
     test('Check XML against XSD Schemes', async () => {

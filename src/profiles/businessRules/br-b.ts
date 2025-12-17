@@ -1,6 +1,6 @@
 import { availableProfiles } from '../../core/factur-x';
 import { PROFILES } from '../../types/ProfileTypes';
-import { COUNTRY_ID_CODES, TAX_CATEGORY_CODES } from '../../types/codes';
+import { TAX_CATEGORY_CODES } from '../../types/codes';
 import { BusinessRuleWithError } from './br_co';
 
 // Preperation when "B" (Split) is added to Category Codes. Tests need to be implemented then.
