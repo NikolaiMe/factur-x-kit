@@ -237,7 +237,11 @@ const _iso6523Codes: Record<ISO6523, string> = {
     '0237': 'CPR (Danish person civil registration number)',
     '0238': 'Plateforme.s agréée.s à la facturation électronique (PPF/PDP)',
     '0239': 'EAEU',
-    '0240': 'Register of legal persons (in French : Répertoire des personnes morales)'
+    '0240': 'Register of legal persons (in French : Répertoire des personnes morales)',
+    '0241': 'Name unknown',
+    '0242': 'OpenPeppol Service Provider Identification Scheme (SPIS)',
+    '0243': 'Name unknown',
+    '0244': 'Tax Identification (Tax ID), Nigeria'
 };
 
 export const iso6523Codes = Object.freeze(_iso6523Codes);

@@ -98,7 +98,7 @@ async function main() {
             inputString = fs.readFileSync(fullPath, 'utf8');
         } catch (error) {
             console.error(`❌ Fehler: Datei konnte nicht gelesen werden: ${filePath}`);
-            console.error(error.message);
+            console.error((error as Error).message);
             process.exit(1);
         }
     } else {

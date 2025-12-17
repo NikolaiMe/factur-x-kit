@@ -93,7 +93,8 @@ const vatExemptionReasons_en: Record<VATEXCodes, string> = {
     'VATEX-FR-298SEXDECIESA':
         'Exempt based on article 298 sexdecies A of the Code Général des Impôts (CGI ; General tax code)',
     'VATEX-FR-CGI295': 'Exempt based on article 295 of the Code Général des Impôts (CGI ; General tax code)',
-    'VATEX-FR-AE': 'Exempt based on 2 of article 283 of the Code Général des Impôts (CGI ; General tax code)'
+    'VATEX-FR-AE': 'Exempt based on 2 of article 283 of the Code Général des Impôts (CGI ; General tax code)',
+    'VATEX-EU-135-1': 'Exempt based on article 135, section 1 of Council Directive 2006/112/EC'
 };
 
 const vatExemptionReasons_de: Record<VATEXCodes, string> = {
@@ -208,7 +209,8 @@ const vatExemptionReasons_de: Record<VATEXCodes, string> = {
     'VATEX-FR-CGI295':
         'Steuerbefreiung gemäß Artikel 295 des Code Général des Impôts (CGI; Allgemeines Steuergesetzbuch)',
     'VATEX-FR-AE':
-        'Steuerbefreiung gemäß Absatz 2 des Artikels 283 des Code Général des Impôts (CGI; Allgemeines Steuergesetzbuch)'
+        'Steuerbefreiung gemäß Absatz 2 des Artikels 283 des Code Général des Impôts (CGI; Allgemeines Steuergesetzbuch)',
+    'VATEX-EU-135-1': 'Steuerbefreit gemäß Artikel 135 Absatz 1 der Richtlinie 2006/112/EG des Rates'
 };
 
 const vatExemptionReasons_fr: Record<VATEXCodes, string> = {
@@ -337,7 +339,8 @@ const vatExemptionReasons_fr: Record<VATEXCodes, string> = {
     'VATEX-FR-CGI275': "Exonéré en vertu de l'article 275 du Code Général des Impôts (CGI)",
     'VATEX-FR-298SEXDECIESA': "Exonéré en vertu de l'article 298 sexdecies A du Code Général des Impôts (CGI)",
     'VATEX-FR-CGI295': "Exonéré en vertu de l'article 295 du Code Général des Impôts (CGI)",
-    'VATEX-FR-AE': "Exonéré en vertu du 2 de l'article 283 du Code Général des Impôts (CGI)"
+    'VATEX-FR-AE': "Exonéré en vertu du 2 de l'article 283 du Code Général des Impôts (CGI)",
+    'VATEX-EU-135-1': "Exonéré en vertu de l'article 135, paragraphe 1 de la directive 2006/112/CE du Conseil"
 };
 
 const _vatExemptionReasons: TranslatedTexts<VATEXCodes> = {
