@@ -727,14 +727,14 @@ describe('Build and check XML', () => {
         }
 
         const xsd = await fs.readFile(
-            path.join(__dirname, 'xsdSchemes', 'COMFORT', 'Factur-X_1.07.3_EN16931.xsd'),
+            path.join(__dirname, 'xsdSchemes', 'COMFORT', 'FACTUR-X_1.07.4_EN16931.xsd'),
             'utf-8'
         );
 
         const xsdImports = [
-            'Factur-X_1.07.3_EN16931_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
-            'Factur-X_1.07.3_EN16931_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
-            'Factur-X_1.07.3_EN16931_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
+            'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
+            'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
+            'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
         ];
 
         const preload: { fileName: string; contents: string }[] = [];
@@ -765,7 +765,7 @@ describe('Build and check XML', () => {
         const convertedXML = await instance.getXML();
 
         const schematron = (
-            await fs.readFile(path.join(__dirname, 'schematronSchemes', 'Factur-X_1.07.3_EN16931.sch'), 'utf-8')
+            await fs.readFile(path.join(__dirname, 'schematronSchemes', 'FACTUR-X_1.07.4_EN16931.sch'), 'utf-8')
         ).toString();
 
         const schema = Schema.fromString(schematron);
