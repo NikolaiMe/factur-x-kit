@@ -1,6 +1,6 @@
 {
     "name": "factur-x-kit",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Read and Write Hybrid Invoice Documents (EN 16931 / Factur-X / ZUGFeRD / eRechnung) in Javascript / Typescript.",
     "keywords": [
         "en16931",
