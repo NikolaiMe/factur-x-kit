@@ -2,6 +2,8 @@ import { availableProfiles } from '../../core/factur-x';
 import { PROFILES } from '../../types/ProfileTypes';
 import { BusinessRuleWithError } from './br_co';
 
+// CII_SR_464 not implemented because only PayeeSpecifiedCreditorFinancialInstitution is part of the ZUGFERD profiles but not PayerSpecifiedDebtorFinancialInstitution
+
 export function CII_SR_465(val: availableProfiles): boolean {
     if (
         val.profile === PROFILES.MINIMUM ||
