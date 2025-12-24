@@ -19,14 +19,14 @@ import {
     TotalsCalculatorInputType,
     ZBasicDocumentLevelTradeAllowanceChargeType_modified,
     ZComfortLineTradeAgreementType_modified,
-    ZComfortTradeLineItem_modified,
     ZOptionalForeignTaxCurrencyType,
     ZTax_modified,
     zExemptionReason,
+    zSimpleTradeLineItem,
     zTaxDueDate
 } from './easyInputType';
 
-type SimpleTradeLineItem = z.infer<typeof ZComfortTradeLineItem_modified>;
+export type SimpleTradeLineItem = z.infer<typeof zSimpleTradeLineItem>;
 type SimpleLineTradeAgreementType = z.infer<typeof ZComfortLineTradeAgreementType_modified>;
 
 function calculateLineTotals(

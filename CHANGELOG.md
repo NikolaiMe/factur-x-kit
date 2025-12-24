@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## [0.3.1] - 2025-12-24
+
+### Changed
+
+-   Exporting some types and zod schemes from easyInputType for easier data-validation and typing.
+    -   zTotalsCalculatorInputType,
+    -   zSimpleTradeLineItem
+    -   SimpleTradeLineItem
+
 ## [0.3.0] - 2025-12-17
 
 ### Changed

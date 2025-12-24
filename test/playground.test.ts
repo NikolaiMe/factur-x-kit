@@ -4,9 +4,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { printNode, zodToTs } from 'zod-to-ts';
 
-import { ZComfortProfileStructure_modified } from '../src/adapter/totalsCalculator/easyInputType';
+import { zTotalsCalculatorInputType } from '../src/adapter/totalsCalculator/easyInputType';
 import { FacturX } from '../src/core/factur-x';
-import { HeaderImageFileType } from '../src/pdfTemplates/invoiceBlocks/headerImage';
 import { HeaderImageType, dinA4Width, mmToPt } from '../src/pdfTemplates/types';
 import { ZBasicProfile } from '../src/profiles/basic/BasicProfile';
 import { ZMinimumProfile } from '../src/profiles/minimum';
@@ -20,7 +19,7 @@ import './profiles/codeDb/xPathDocumentFunction';
 describe('playground', () => {
     it('shall run', () => {
         const identifier = 'basicwl';
-        const { node } = zodToTs(ZComfortProfileStructure_modified, identifier);
+        const { node } = zodToTs(zTotalsCalculatorInputType, identifier);
         const nodeString = printNode(node);
         //logTypeWithComments(nodeString);
 
