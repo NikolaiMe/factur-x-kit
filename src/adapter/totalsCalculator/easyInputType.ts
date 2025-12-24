@@ -71,7 +71,7 @@ export const ZComfortLineTradeSettlementType_modified = ZComfortLineTradeSettlem
     tax: ZTax_modified
 });
 
-export const ZComfortTradeLineItem_modified = ZComfortTradeLineItem.extend({
+export const zSimpleTradeLineItem = ZComfortTradeLineItem.extend({
     productPriceAgreement: ZComfortLineTradeAgreementType_modified,
     settlement: ZComfortLineTradeSettlementType_modified
 });
@@ -107,11 +107,11 @@ export const ZComfortTotals_modiified = z.object({
     prepaidAmount: ZAmountType.optional()
 });
 
-export const ZComfortProfileStructure_modified = ZComfortProfileStructure.omit({
+export const zTotalsCalculatorInputType = ZComfortProfileStructure.omit({
     profile: true
 }).extend({
-    invoiceLines: ZComfortTradeLineItem_modified.array(),
+    invoiceLines: zSimpleTradeLineItem.array(),
     totals: ZComfortTotals_modiified.optional()
 });
 
-export type TotalsCalculatorInputType = z.infer<typeof ZComfortProfileStructure_modified>;
+export type TotalsCalculatorInputType = z.infer<typeof zTotalsCalculatorInputType>;
