@@ -6,7 +6,7 @@ import { UNIT_CODES } from '../codes';
 
 export const ZQuantityWithRequiredUnitType = z.object({
     quantity: z.number(),
-    unit: z.nativeEnum(UNIT_CODES)
+    unit: z.enum(UNIT_CODES)
 });
 
 export type QuantityWithRequiredUnitType = z.infer<typeof ZQuantityWithRequiredUnitType>;

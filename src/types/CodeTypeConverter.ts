@@ -4,7 +4,7 @@ import { BaseTypeConverter, TypeConverterError } from './BaseTypeConverter';
 
 // Helper function to create Zod enum schema with proper type inference
 export function ZCodeType<T extends string = string>(enumObj?: Record<string, T>) {
-    return (enumObj ? z.nativeEnum(enumObj) : z.string()) as z.ZodType<T>;
+    return (enumObj ? z.enum(enumObj) : z.string()) as z.ZodType<T>;
 }
 
 export type CodeType<T extends string = string> = T;

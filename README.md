@@ -11,11 +11,11 @@ An all-in-one library for Hybrid Invoice Documents (Factur-X / ZUGFeRD) for Java
 
 You can use this library to:
 
--   Create hybrid invoices (PDF/A-3 and XML content) from the same data object
--   Convert a standard PDF invoice to the PDF/A-3 format and attach XML content to it
--   Parse data from a hybrid invoice
--   Validate the content of a hybrid invoice
--   Edit the XML content of a hybrid invoice (e.g., to switch to a higher profile)
+- Create hybrid invoices (PDF/A-3 and XML content) from the same data object
+- Convert a standard PDF invoice to the PDF/A-3 format and attach XML content to it
+- Parse data from a hybrid invoice
+- Validate the content of a hybrid invoice
+- Edit the XML content of a hybrid invoice (e.g., to switch to a higher profile)
 
 The library also supports you in creating invoice data by calculating totals, line totals, and taxes, and creating the tax-breakdown just from the invoice-line prices.
 
@@ -78,12 +78,12 @@ If you need help to understand which data corresponds to which key, you can use 
 
 For an easier overview of which profile supports which keys, you can check out the TypeScript type definitions of every profile. As you can see the datatypes are backward compatible and the lower profiles are just subsets of the higher profiles:
 
--   [Minimum](https://github.com/NikolaiMe/factur-x-kit/blob/main/docs/minimum_datatype.ts)
--   [Basic Without Lines](https://github.com/NikolaiMe/factur-x-kit/blob/main/docs/basicWL_datatype.ts)
--   [Basic](https://github.com/NikolaiMe/factur-x-kit/blob/main/docs/basic_datatype.ts)
--   [Comfort](https://github.com/NikolaiMe/factur-x-kit/blob/main/docs/comfort_datatype.ts)
--   Extended right now uses the exact same type as comfort (Do not use!)
--   X-Rechnung not yet implemented
+- [Minimum](https://github.com/NikolaiMe/factur-x-kit/blob/main/docs/minimum_datatype.ts)
+- [Basic Without Lines](https://github.com/NikolaiMe/factur-x-kit/blob/main/docs/basicWL_datatype.ts)
+- [Basic](https://github.com/NikolaiMe/factur-x-kit/blob/main/docs/basic_datatype.ts)
+- [Comfort](https://github.com/NikolaiMe/factur-x-kit/blob/main/docs/comfort_datatype.ts)
+- Extended right now uses the exact same type as comfort (Do not use!)
+- X-Rechnung not yet implemented
 
 > **Attention!** <br>Minimum and Basic Without Lines profiles are not considered valid e-invoices in Germany and also won't be accepted by France in the near future. It's highly recommended to use at least the Basic profile. The recommended profile is Comfort (EN 16931).
 
@@ -111,11 +111,11 @@ const myData: BasicProfile ={
 
 Example data:
 
--   [Standard invoice (Comfort Profile)](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/design_test_object_easy.ts)
--   [Standard invoice with more fields used (Comfort Profile)](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/design_test_object.ts)
--   [Simple invoice for German 'Kleinunternehmer' Exempt from tax (Comfort Profile)](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/design_test_object_kleinunternehmer.ts)
--   [Basic Without Lines Profile invoice](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/profiles/basicwithoutlines_test_objects.ts)
--   [Basic Profile invoice (based on the BasicWL invoice above)](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/profiles/basicwithoutlines_test_objects.ts)
+- [Standard invoice (Comfort Profile)](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/design_test_object_easy.ts)
+- [Standard invoice with more fields used (Comfort Profile)](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/design_test_object.ts)
+- [Simple invoice for German 'Kleinunternehmer' Exempt from tax (Comfort Profile)](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/design_test_object_kleinunternehmer.ts)
+- [Basic Without Lines Profile invoice](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/profiles/basicwithoutlines_test_objects.ts)
+- [Basic Profile invoice (based on the BasicWL invoice above)](https://github.com/NikolaiMe/factur-x-kit/blob/main/test/profiles/basicwithoutlines_test_objects.ts)
 
 #### Create the data with the help of adapters
 
@@ -127,9 +127,9 @@ A Factur-X invoice has a lot of values which must be properly calculated from ot
 
 Some information about the changes from the standard Comfort profile:
 
--   `totals.taxExemptionReason` was added. If you use `TAX_CATEGORY_CODES.EXEMPT_FROM_TAX` in any of your lines (e.g., if you are a German "Kleinunternehmer"), this field is mandatory and should contain the reason why your tax rate is 0. If you use any other tax category from `TaxTypeWithoutTaxRate`, it is highly recommended to use this field, but it's not mandatory (TaxExemptionReasonCodes will be used as a backup).
--   `totals.optionalTaxDueDates` is usually not used because the taxDueDate is usually the same as the invoice date. If you need this field for some reason, you can add the due dates for the given tax category here.
--   `totals.optionalTaxCurrency` is also typically not used, as the tax currency is the same as the invoice currency. If you need it, you can enter the currency and the exchange rate between the invoice currency and the tax currency here, and `totalsCalculator` will add the tax amount also in that other currency.
+- `totals.taxExemptionReason` was added. If you use `TAX_CATEGORY_CODES.EXEMPT_FROM_TAX` in any of your lines (e.g., if you are a German "Kleinunternehmer"), this field is mandatory and should contain the reason why your tax rate is 0. If you use any other tax category from `TaxTypeWithoutTaxRate`, it is highly recommended to use this field, but it's not mandatory (TaxExemptionReasonCodes will be used as a backup).
+- `totals.optionalTaxDueDates` is usually not used because the taxDueDate is usually the same as the invoice date. If you need this field for some reason, you can add the due dates for the given tax category here.
+- `totals.optionalTaxCurrency` is also typically not used, as the tax currency is the same as the invoice currency. If you need it, you can enter the currency and the exchange rate between the invoice currency and the tax currency here, and `totalsCalculator` will add the tax amount also in that other currency.
 
 Usage:
 
@@ -412,16 +412,16 @@ Can be found [here](https://github.com/NikolaiMe/factur-x-kit/blob/main/CHANGELO
 
 ## Dependencies
 
--   pdf-lib
--   zod
--   fast-xml-parser
--   object-path
--   mime-types
+- pdf-lib
+- zod
+- fast-xml-parser
+- object-path
+- mime-types
 
 ## Contributors
 
--   [schwarmco](https://github.com/schwarmco)
--   [ahelmberger](https://github.com/ahelmberger)
+- [schwarmco](https://github.com/schwarmco)
+- [ahelmberger](https://github.com/ahelmberger)
 
 ## Special Thanks
 
@@ -431,9 +431,9 @@ Can be found [here](https://github.com/NikolaiMe/factur-x-kit/blob/main/CHANGELO
 
 ## Next steps
 
--   [ ] XRechnung Profile
--   [ ] Extended Profile
--   [ ] Attachment of Referenced Documents
--   [ ] Upgrade to zod 4
-    -   [ ] Switch BR function from zod.refine to zod.check
-    -   [ ] Add proper paths to BR-Errors (including correct array item)
+- [ ] XRechnung Profile
+- [ ] Extended Profile
+- [ ] Attachment of Referenced Documents
+- [x] Upgrade to zod 4
+    - [ ] Switch BR function from zod.refine to zod.check
+    - [ ] Add proper paths to BR-Errors (including correct array item)

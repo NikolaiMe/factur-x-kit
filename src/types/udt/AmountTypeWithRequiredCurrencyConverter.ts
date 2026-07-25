@@ -6,7 +6,7 @@ import { CURRENCY_CODES } from '../codes';
 
 export const ZAmountTypeWithRequiredCurrency = z.object({
     amount: z.number(),
-    currency: z.nativeEnum(CURRENCY_CODES)
+    currency: z.enum(CURRENCY_CODES)
 });
 
 export type AmountTypeWithRequiredCurrency = z.infer<typeof ZAmountTypeWithRequiredCurrency>;

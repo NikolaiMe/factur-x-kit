@@ -143,7 +143,7 @@ function printTaxBreakdown(
               )} ${textTranslations[locale].OF} ${meta.currencyConverter.format(round(tax.basisAmount, 2))}) `
             : '';
 
-        let taxDescription = '';
+        let taxDescription: string;
         switch (tax.categoryCode) {
             case TAX_CATEGORY_CODES.IGIC:
                 taxDescription = `IGIC${taxRate}`;

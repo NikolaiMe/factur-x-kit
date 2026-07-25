@@ -4,7 +4,7 @@ import { BaseTypeConverter, TypeConverterError } from '../BaseTypeConverter';
 import { MIME_CODES } from '../codes';
 
 export const ZBinaryObjectType = z.object({
-    mimeCode: z.nativeEnum(MIME_CODES),
+    mimeCode: z.enum(MIME_CODES),
     fileName: z.string(),
     base64Data: z.string()
 });

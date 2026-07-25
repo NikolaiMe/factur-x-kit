@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import * as fs from 'fs';
 import { XMLParser } from 'fast-xml-parser';
 import path from 'node:path';

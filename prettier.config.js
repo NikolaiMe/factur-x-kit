@@ -5,7 +5,7 @@ export default {
     singleQuote: true,
     printWidth: 120,
     arrowParens: 'avoid',
-    plugins: ['@miller-svt/prettier-plugin-sort-imports', 'prettier-plugin-packagejson'],
+    plugins: ['@trivago/prettier-plugin-sort-imports', 'prettier-plugin-packagejson'],
     importOrder: ['^[./]'],
     importOrderSeparation: true,
     importOrderSortSpecifiers: true,

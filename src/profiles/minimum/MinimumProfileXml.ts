@@ -79,7 +79,7 @@ export function isMinimumProfileXml(data: unknown): data is MinimumProfileXml {
     const result = ZMinimumProfileXml.safeParse(data);
     if (!result.success) {
         console.dir(data, { depth: null });
-        console.dir(result.error.errors, { depth: null });
+        console.dir(result.error.issues, { depth: null });
     }
     return result.success;
 }

@@ -2,7 +2,7 @@
 import { Schema } from 'node-schematron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { printNode, zodToTs } from 'zod-to-ts';
+import { createAuxiliaryTypeStore, printNode, zodToTs } from 'zod-to-ts';
 
 import { zTotalsCalculatorInputType } from '../src/adapter/totalsCalculator/easyInputType';
 import { FacturX } from '../src/core/factur-x';
@@ -18,18 +18,24 @@ import './profiles/codeDb/xPathDocumentFunction';
 
 describe('playground', () => {
     it('shall run', () => {
-        const identifier = 'basicwl';
-        const { node } = zodToTs(zTotalsCalculatorInputType, identifier);
+        const { node } = zodToTs(zTotalsCalculatorInputType, {
+            auxiliaryTypeStore: createAuxiliaryTypeStore(),
+            unrepresentable: 'any'
+        });
         const nodeString = printNode(node);
         //logTypeWithComments(nodeString);
 
-        const identifier4 = 'basic';
-        const { node: node4 } = zodToTs(ZBasicProfile, identifier4);
+        const { node: node4 } = zodToTs(ZBasicProfile, {
+            auxiliaryTypeStore: createAuxiliaryTypeStore(),
+            unrepresentable: 'any'
+        });
         const nodeString4 = printNode(node4);
         //logTypeWithComments(nodeString4);
 
-        const min = 'minimum';
-        const { node: minimum } = zodToTs(ZMinimumProfile, min);
+        const { node: minimum } = zodToTs(ZMinimumProfile, {
+            auxiliaryTypeStore: createAuxiliaryTypeStore(),
+            unrepresentable: 'any'
+        });
         const nodeStringMin = printNode(minimum);
         //logTypeWithComments(nodeStringMin);
 
@@ -58,16 +64,19 @@ function logTypeWithComments(nodeString: string) {
     console.log(commentedString);
 }
 
-describe('factur-x validity check', () => {
+const externalBasicWithoutLinesXmlPath = process.env.FACTUR_X_BASIC_WITHOUT_LINES_XML;
+const describeExternalXml = externalBasicWithoutLinesXmlPath ? describe : describe.skip;
+
+describeExternalXml('factur-x validity check for an external BASIC-WL fixture', () => {
     let xml: string;
     beforeAll(async () => {
-        xml = await fs.readFile('C:/Users/User/Documents/factur-x_bwl.xml', 'utf-8');
+        xml = await fs.readFile(externalBasicWithoutLinesXmlPath!, 'utf-8');
     });
 
     test('Builds Valid XML According to SCHEMATRON Schema', async () => {
         const schematron = (
             await fs.readFile(
-                path.join(__dirname, 'profiles', 'schematronSchemes', 'Factur-X_1.07.4_BASIC-WL.sch'),
+                path.join(__dirname, 'profiles', 'schematronSchemes', 'FACTUR-X_1.07.4_BASIC-WL.sch'),
                 'utf-8'
             )
         ).toString();

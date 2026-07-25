@@ -11,7 +11,9 @@ function generateDataUrlFromFile(filePath) {
         return `data:${mimeType};base64,${base64}`;
     } catch (error) {
         console.error(`Error generating data URL for ${filePath}:`, error);
-        throw new Error(`Failed to generate data URL for asset: ${filePath}. Original error: ${error.message}`);
+        throw new Error(`Failed to generate data URL for asset: ${filePath}. Original error: ${error.message}`, {
+            cause: error
+        });
     }
 }
 

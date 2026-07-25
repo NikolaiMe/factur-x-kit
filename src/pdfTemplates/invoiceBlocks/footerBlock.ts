@@ -87,13 +87,11 @@ function convertTradeContactToString(data: availableProfiles, locale: SupportedL
 }
 
 function convertPaymentMeanToString(data: availableProfiles): string {
-    if (
-        !(
-            'paymentInformation' in data &&
-            data.paymentInformation.paymentMeans &&
-            data.paymentInformation.paymentMeans.length > 0
-        )
-    )
+    if (!(
+        'paymentInformation' in data &&
+        data.paymentInformation.paymentMeans &&
+        data.paymentInformation.paymentMeans.length > 0
+    ))
         return '';
 
     const creditTransferMean = data.paymentInformation.paymentMeans.find(

@@ -166,7 +166,7 @@ export function isBasicProfileXml(data: unknown): data is BasicProfileXml {
 
     if (!result.success) {
         console.dir(data, { depth: null });
-        console.dir(result.error.errors, { depth: null });
+        console.dir(result.error.issues, { depth: null });
     }
     return result.success;
 }

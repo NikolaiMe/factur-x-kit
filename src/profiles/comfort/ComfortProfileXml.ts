@@ -195,7 +195,7 @@ export function isComfortProfileXml(data: unknown): data is ComfortProfileXml {
 
     if (!result.success) {
         console.dir(data, { depth: null });
-        console.dir(result.error.errors, { depth: null });
+        console.dir(result.error.issues, { depth: null });
     }
     return result.success;
 }

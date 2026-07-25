@@ -4,7 +4,9 @@
         "outDir": "./dist",
         "rootDir": "./src",
         "declaration": true,
-        "noEmit": true
+        "noEmit": true,
+        "types": ["node", "jest"],
+        "ignoreDeprecations": "6.0"
     },
     "include": [
         "src/**/*" // Sagt TypeScript, welche Dateien in 'src' es kompilieren soll
