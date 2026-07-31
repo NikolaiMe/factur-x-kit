@@ -422,6 +422,7 @@ Can be found [here](https://github.com/NikolaiMe/factur-x-kit/blob/main/CHANGELO
 
 - [schwarmco](https://github.com/schwarmco)
 - [ahelmberger](https://github.com/ahelmberger)
+- [PaulSchult](https://github.com/PaulSchult)
 
 ## Special Thanks
 
