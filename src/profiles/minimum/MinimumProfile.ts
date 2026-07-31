@@ -75,7 +75,7 @@ export const ZMinimumProfile = [
     ...BR_O,
     ...BR_S,
     ...BR_Z
-].reduce<z.ZodTypeAny>((schema, rule) => schema.refine(rule.rule, rule.error), ZMinimumProfileStructure);
+].reduce<z.ZodType<MinimumProfile>>((schema, rule) => schema.refine(rule.rule, rule.error), ZMinimumProfileStructure);
 
 export function isMinimumProfile(data: unknown): data is MinimumProfile {
     return ZMinimumProfileStructure.safeParse(data).success;
@@ -86,7 +86,12 @@ export function isValidMinimumProfile(data: unknown): validationResult {
     if (!result.success) {
         return {
             valid: false,
-            errors: result.error.issues.map(issue => ({ message: issue.message, path: issue.path }))
+            errors: result.error.issues.map(issue => ({
+                message: issue.message,
+                path: issue.path.filter(
+                    (segment): segment is string | number => typeof segment === 'string' || typeof segment === 'number'
+                )
+            }))
         };
     }
     return { valid: result.success };

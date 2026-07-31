@@ -278,12 +278,10 @@ export function BR_IP_8(val: availableProfiles): boolean {
             sumOfDocumentLevelAllowancesWithIPSIRateTax +
             sumOfDocumentLevelChargesWithIPSIRateTax;
 
-        if (
-            !(
-                totalProvidedIPSIRateTaxAmount - 0.1 <= totalExpectedIPSITaxAmount &&
-                totalProvidedIPSIRateTaxAmount + 0.1 >= totalExpectedIPSITaxAmount
-            )
-        ) {
+        if (!(
+            totalProvidedIPSIRateTaxAmount - 0.1 <= totalExpectedIPSITaxAmount &&
+            totalProvidedIPSIRateTaxAmount + 0.1 >= totalExpectedIPSITaxAmount
+        )) {
             return false;
         }
     }

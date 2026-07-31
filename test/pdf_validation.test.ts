@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import * as fs from 'fs';
 import fontkit from '@pdf-lib/fontkit';
 import { XMLParser } from 'fast-xml-parser';

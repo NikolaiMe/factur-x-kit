@@ -5,7 +5,7 @@ import { ZIdType } from './IdTypeConverter';
 
 // Helper function to create Zod enum schema with proper type inference
 function createScheme<T extends string = string>(enumObj?: Record<string, T>) {
-    return enumObj ? z.nativeEnum(enumObj) : z.string();
+    return enumObj ? z.enum(enumObj) : z.string();
 }
 
 // Generic type and schema creator with explicit type casting

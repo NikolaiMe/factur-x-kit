@@ -150,14 +150,19 @@ export const ZBasicProfile = [
     ...BR_O,
     ...BR_S,
     ...BR_Z
-].reduce<z.ZodTypeAny>((schema, rule) => schema.refine(rule.rule, rule.error), ZBasicProfileStructure);
+].reduce<z.ZodType<BasicProfile>>((schema, rule) => schema.refine(rule.rule, rule.error), ZBasicProfileStructure);
 
 export function isValidBasicProfile(data: unknown): validationResult {
     const result = ZBasicProfile.safeParse(data);
     if (!result.success) {
         return {
             valid: false,
-            errors: result.error.issues.map(issue => ({ message: issue.message, path: issue.path }))
+            errors: result.error.issues.map(issue => ({
+                message: issue.message,
+                path: issue.path.filter(
+                    (segment): segment is string | number => typeof segment === 'string' || typeof segment === 'number'
+                )
+            }))
         };
     }
     return { valid: result.success };

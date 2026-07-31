@@ -11,7 +11,7 @@ export const ZTradeAllowanceChargeBasisType = z.object({
     calculationPercent: ZPercentType.optional(),
     basisAmount: ZAmountType.optional(),
     actualAmount: ZAmountType,
-    reasonCode: z.union([z.nativeEnum(CHARGE_REASONS_CODES), z.nativeEnum(ALLOWANCE_REASONS_CODES)]).optional(),
+    reasonCode: z.union([z.enum(CHARGE_REASONS_CODES), z.enum(ALLOWANCE_REASONS_CODES)]).optional(),
     reason: ZTextType.optional(),
     categoryTradeTax: z.object({
         typeCode: ZCodeType(TAX_TYPE_CODE),

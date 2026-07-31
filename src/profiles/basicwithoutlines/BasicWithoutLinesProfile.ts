@@ -170,7 +170,10 @@ export const ZBasicWithoutLinesProfile = [
     ...BR_O,
     ...BR_S,
     ...BR_Z
-].reduce<z.ZodTypeAny>((schema, rule) => schema.refine(rule.rule, rule.error), ZBasicWithoutLinesProfileStructure);
+].reduce<z.ZodType<BasicWithoutLinesProfile>>(
+    (schema, rule) => schema.refine(rule.rule, rule.error),
+    ZBasicWithoutLinesProfileStructure
+);
 
 export function isBasicWithoutLinesProfile(data: unknown): data is BasicWithoutLinesProfile {
     return ZBasicWithoutLinesProfileStructure.safeParse(data).success;
@@ -181,7 +184,12 @@ export function isValidBasicWithoutLinesProfile(data: unknown): validationResult
     if (!result.success) {
         return {
             valid: false,
-            errors: result.error.issues.map(issue => ({ message: issue.message, path: issue.path }))
+            errors: result.error.issues.map(issue => ({
+                message: issue.message,
+                path: issue.path.filter(
+                    (segment): segment is string | number => typeof segment === 'string' || typeof segment === 'number'
+                )
+            }))
         };
     }
     return { valid: result.success };

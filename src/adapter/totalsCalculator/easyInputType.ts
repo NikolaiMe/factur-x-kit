@@ -1,5 +1,4 @@
 // Original: ZComfortLineTradeAgreementType
-
 import { z } from 'zod';
 
 import { ZComfortProfileStructure } from '../../profiles/comfort';

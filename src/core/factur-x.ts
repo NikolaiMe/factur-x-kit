@@ -18,11 +18,7 @@ import FacturXPdf from './pdf';
 import { buildXML, parseXML } from './xml';
 
 export type availableProfiles =
-    | MinimumProfile
-    | BasicWithoutLinesProfile
-    | BasicProfile
-    | ComfortProfile
-    | ExtendedProfile;
+    MinimumProfile | BasicWithoutLinesProfile | BasicProfile | ComfortProfile | ExtendedProfile;
 export type availableConverters =
     | MinimumProfileConverter
     | BasicWithoutLinesProfileConverter

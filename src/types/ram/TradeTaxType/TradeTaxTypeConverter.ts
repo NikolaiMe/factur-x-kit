@@ -25,13 +25,9 @@ import {
 } from './ComfortDocumentLevelTradeTaxType';
 
 export type allowedValueTypes_TradeTax =
-    | BasicDocumentLevelTradeTaxType
-    | BasicLineLevelTradeTaxType
-    | ComfortDocumentLevelTradeTaxType;
+    BasicDocumentLevelTradeTaxType | BasicLineLevelTradeTaxType | ComfortDocumentLevelTradeTaxType;
 export type allowedXmlTypes_TradeTax =
-    | BasicDocumentLevelTradeTaxTypeXml
-    | BasicLineLevelTradeTaxTypeXml
-    | ComfortDocumentLevelTradeTaxTypeXml;
+    BasicDocumentLevelTradeTaxTypeXml | BasicLineLevelTradeTaxTypeXml | ComfortDocumentLevelTradeTaxTypeXml;
 
 export class TradeTaxTypeConverter<
     ValueType extends allowedValueTypes_TradeTax,

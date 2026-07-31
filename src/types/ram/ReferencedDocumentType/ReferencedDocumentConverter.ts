@@ -64,23 +64,12 @@ export class ReferencedDocumentTypeConverter<
 
     constructor(valueSchema?: z.ZodType<ValueType>, xmlSchema?: z.ZodType<XmlType>, typeCode?: '50' | '130' | '916') {
         if (!valueSchema) {
-            valueSchema = ZReferencedDocumentType_docId_issueDate as unknown as z.ZodType<
-                ValueType,
-                z.ZodTypeDef,
-                ValueType
-            >;
+            valueSchema = ZReferencedDocumentType_docId_issueDate as unknown as z.ZodType<ValueType>;
         }
         if (!xmlSchema) {
-            xmlSchema = ZReferencedDocumentTypeXml_docId_issueDate as unknown as z.ZodType<
-                XmlType,
-                z.ZodTypeDef,
-                XmlType
-            >;
+            xmlSchema = ZReferencedDocumentTypeXml_docId_issueDate as unknown as z.ZodType<XmlType>;
         }
-        super(
-            valueSchema ?? ZReferencedDocumentType_docId_issueDate,
-            xmlSchema ?? ZReferencedDocumentTypeXml_docId_issueDate
-        );
+        super(valueSchema, xmlSchema);
 
         this.typeCode = typeCode;
     }

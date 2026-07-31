@@ -1,5 +1,4 @@
 // In 'profiles/codeDb/xPathDocumentFunction.ts'
-
 import { DOMParser } from '@xmldom/xmldom';
 import type { Document } from '@xmldom/xmldom';
 import { registerCustomXPathFunction } from 'fontoxpath';

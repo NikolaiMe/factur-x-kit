@@ -281,12 +281,10 @@ export function BR_S_8(val: availableProfiles): boolean {
             sumOfDocumentLevelAllowancesWithStandardRateTax +
             sumOfDocumentLevelChargesWithStandardRateTax;
 
-        if (
-            !(
-                totalProvidedStandardRateTaxAmount - 0.1 <= totalExpectedStandardTaxAmount &&
-                totalProvidedStandardRateTaxAmount + 0.1 >= totalExpectedStandardTaxAmount
-            )
-        ) {
+        if (!(
+            totalProvidedStandardRateTaxAmount - 0.1 <= totalExpectedStandardTaxAmount &&
+            totalProvidedStandardRateTaxAmount + 0.1 >= totalExpectedStandardTaxAmount
+        )) {
             return false;
         }
     }

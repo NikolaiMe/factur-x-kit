@@ -278,12 +278,10 @@ export function BR_IG_8(val: availableProfiles): boolean {
             sumOfDocumentLevelAllowancesWithIGICRateTax +
             sumOfDocumentLevelChargesWithIGICRateTax;
 
-        if (
-            !(
-                totalProvidedIGICRateTaxAmount - 0.1 <= totalExpectedIGICTaxAmount &&
-                totalProvidedIGICRateTaxAmount + 0.1 >= totalExpectedIGICTaxAmount
-            )
-        ) {
+        if (!(
+            totalProvidedIGICRateTaxAmount - 0.1 <= totalExpectedIGICTaxAmount &&
+            totalProvidedIGICRateTaxAmount + 0.1 >= totalExpectedIGICTaxAmount
+        )) {
             return false;
         }
     }

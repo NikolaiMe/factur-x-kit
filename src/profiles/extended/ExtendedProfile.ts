@@ -169,7 +169,7 @@ export const ZExtendedProfile = [
     ...BR_O,
     ...BR_S,
     ...BR_Z
-].reduce<z.ZodTypeAny>((schema, rule) => schema.refine(rule.rule, rule.error), ZExtendedProfileStructure);
+].reduce<z.ZodType<ExtendedProfile>>((schema, rule) => schema.refine(rule.rule, rule.error), ZExtendedProfileStructure);
 
 export function isExtendedProfile(data: unknown): data is ExtendedProfile {
     const result = ZExtendedProfileStructure.safeParse(data);
@@ -181,7 +181,12 @@ export function isValidExtendedProfile(data: unknown): validationResult {
     if (!result.success) {
         return {
             valid: false,
-            errors: result.error.issues.map(issue => ({ message: issue.message, path: issue.path }))
+            errors: result.error.issues.map(issue => ({
+                message: issue.message,
+                path: issue.path.filter(
+                    (segment): segment is string | number => typeof segment === 'string' || typeof segment === 'number'
+                )
+            }))
         };
     }
     return { valid: result.success };
