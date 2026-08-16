@@ -12,7 +12,9 @@ export default defineConfig({
     clean: true,
     loader: {
         '.ttf': 'dataurl',
-        '.icc': 'dataurl'
+        '.icc': 'dataurl',
+        '.xsd': 'text',
+        '.xml': 'text'
     },
     esbuildOptions(options) {
         options.chunkNames = 'chunks/[name]-[hash]';

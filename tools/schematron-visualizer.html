@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Schematron Rule Extractor</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                background-color: #f4f6f8;
+                color: #333;
+                margin: 0;
+                padding: 20px;
+            }
+            .container {
+                max-width: 1100px;
+                margin: 0 auto;
+                background: #ffffff;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            }
+            h1 {
+                margin-top: 0;
+                color: #1a252f;
+                font-size: 1.5rem;
+            }
+            .input-section {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            textarea {
+                width: 100%;
+                height: 150px;
+                font-family: monospace;
+                font-size: 13px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                resize: vertical;
+            }
+            .file-upload {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .controls {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            button {
+                background-color: #0066cc;
+                color: #fff;
+                border: none;
+                padding: 10px 16px;
+                font-size: 14px;
+                font-weight: 600;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            button:hover {
+                background-color: #0052a3;
+            }
+            button.secondary {
+                background-color: #28a745;
+            }
+            button.secondary:hover {
+                background-color: #218838;
+            }
+            .status {
+                font-size: 14px;
+                color: #666;
+                margin-left: auto;
+            }
+            .error {
+                color: #d9534f;
+                font-weight: bold;
+                margin-top: 10px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            th,
+            td {
+                border: 1px solid #e0e0e0;
+                padding: 10px 12px;
+                text-align: left;
+                vertical-align: top;
+                font-size: 14px;
+            }
+            th {
+                background-color: #f8f9fa;
+                font-weight: 600;
+                color: #495057;
+                cursor: pointer;
+                user-select: none;
+                transition: background 0.2s;
+            }
+            th:hover {
+                background-color: #e9ecef;
+            }
+            th .sort-icon {
+                font-size: 12px;
+                margin-left: 5px;
+                color: #888;
+            }
+            /* Tabellenzeilen-Interaktionen */
+            .main-row {
+                cursor: pointer;
+                transition: background-color 0.15s;
+            }
+            .main-row:hover {
+                background-color: #f1f5f9 !important;
+            }
+            .toggle-col {
+                width: 30px;
+                text-align: center;
+                color: #666;
+                font-size: 12px;
+                vertical-align: middle;
+            }
+            td.id-col {
+                font-weight: bold;
+                white-space: nowrap;
+                color: #0066cc;
+                width: 15%;
+            }
+            /* Ausklappbarer Detailbereich */
+            .detail-row {
+                background-color: #f8fafc;
+            }
+            .detail-content {
+                padding: 12px 16px;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                border-left: 3px solid #0066cc;
+            }
+            .detail-block strong {
+                display: block;
+                font-size: 12px;
+                text-transform: uppercase;
+                color: #64748b;
+                margin-bottom: 4px;
+                letter-spacing: 0.5px;
+            }
+            .detail-block code {
+                display: block;
+                background-color: #e2e8f0;
+                color: #0f172a;
+                padding: 8px 12px;
+                border-radius: 4px;
+                font-family: monospace;
+                font-size: 13px;
+                white-space: pre-wrap;
+                word-break: break-all;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Schematron Rule Extractor</h1>
+
+            <div class="input-section">
+                <div class="file-upload">
+                    <input type="file" id="fileInput" accept=".xml,.sch,.schematron" />
+                    <span>oder XML unten einfügen:</span>
+                </div>
+
+                <textarea id="xmlInput" placeholder="Füge hier deinen Schematron XML-Code ein..."></textarea>
+
+                <div class="controls">
+                    <button onclick="processXML()">Tabelle generieren</button>
+                    <button class="secondary" onclick="copyAsMarkdown()">Als Markdown-Tabelle kopieren</button>
+                    <span class="status" id="statusText">0 Regeln gefunden</span>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="error"></div>
+
+            <table id="rulesTable" style="display: none">
+                <thead>
+                    <tr>
+                        <th class="toggle-col" style="cursor: default"></th>
+                        <th onclick="sortTable('id')">ID <span id="sortIconId" class="sort-icon">↕</span></th>
+                        <th onclick="sortTable('text')">Rule <span id="sortIconText" class="sort-icon">↕</span></th>
+                    </tr>
+                </thead>
+                <tbody id="rulesBody"></tbody>
+            </table>
+        </div>
+
+        <script>
+            let extractedRules = [];
+            let currentSortColumn = null;
+            let currentSortOrder = 'asc';
+
+            // Datei einlesen
+            document.getElementById('fileInput').addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('xmlInput').value = e.target.result;
+                    processXML();
+                };
+                reader.readAsText(file);
+            });
+
+            // XML verarbeiten & Regeln extrahieren
+            function processXML() {
+                const xmlText = document.getElementById('xmlInput').value;
+                const errorDiv = document.getElementById('errorMessage');
+                const table = document.getElementById('rulesTable');
+                const statusText = document.getElementById('statusText');
+
+                errorDiv.innerText = '';
+                extractedRules = [];
+                currentSortColumn = null;
+                currentSortOrder = 'asc';
+                updateSortIcons();
+
+                if (!xmlText.trim()) {
+                    errorDiv.innerText = 'Bitte füge XML-Code ein oder wähle eine Datei aus.';
+                    table.style.display = 'none';
+                    statusText.innerText = '0 Regeln gefunden';
+                    return;
+                }
+
+                try {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+                    // Prüfen auf XML-Parsing-Fehler
+                    const parserError = xmlDoc.querySelector('parsererror');
+                    if (parserError) {
+                        throw new Error('Ungültiges XML Format. Bitte Datei/Text prüfen.');
+                    }
+
+                    // Alle Elemente durchsuchen
+                    const allElements = xmlDoc.getElementsByTagName('*');
+
+                    for (let el of allElements) {
+                        const localName = el.localName || el.nodeName.split(':').pop();
+
+                        if (localName === 'assert' || localName === 'report') {
+                            const id = el.getAttribute('id') || '-';
+                            const text = el.textContent.replace(/\s+/g, ' ').trim();
+                            const testAttr = el.getAttribute('test') || 'Kein test-Attribut vorhanden';
+
+                            // Elternelement <rule> suchen, um den context zu ermitteln
+                            let parent = el.parentNode;
+                            while (parent && (parent.localName || parent.nodeName.split(':').pop()) !== 'rule') {
+                                parent = parent.parentNode;
+                            }
+                            const contextAttr = parent
+                                ? parent.getAttribute('context') || 'Kein context definiert'
+                                : 'Nicht gefunden';
+
+                            extractedRules.push({
+                                id: id,
+                                text: text,
+                                context: contextAttr,
+                                test: testAttr,
+                                type: localName
+                            });
+                        }
+                    }
+
+                    if (extractedRules.length === 0) {
+                        errorDiv.innerText = 'Keine <assert> oder <report> Elemente im XML gefunden.';
+                        table.style.display = 'none';
+                        statusText.innerText = '0 Regeln gefunden';
+                        return;
+                    }
+
+                    // Standardmäßig nach ID sortieren
+                    sortTable('id', false);
+
+                    table.style.display = 'table';
+                    statusText.innerText = `${extractedRules.length} Regel(n) gefunden`;
+                } catch (err) {
+                    errorDiv.innerText = err.message;
+                    table.style.display = 'none';
+                    statusText.innerText = 'Fehler beim Verarbeiten';
+                }
+            }
+
+            // Sortier-Logik
+            function sortTable(column, toggleOrder = true) {
+                if (toggleOrder) {
+                    if (currentSortColumn === column) {
+                        currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSortColumn = column;
+                        currentSortOrder = 'asc';
+                    }
+                } else {
+                    currentSortColumn = column;
+                    currentSortOrder = 'asc';
+                }
+
+                extractedRules.sort((a, b) => {
+                    const valA = a[column] || '';
+                    const valB = b[column] || '';
+                    const compareResult = valA.localeCompare(valB, undefined, { numeric: true, sensitivity: 'base' });
+                    return currentSortOrder === 'asc' ? compareResult : -compareResult;
+                });
+
+                renderTable();
+                updateSortIcons();
+            }
+
+            // Tabelle im DOM aufbauen
+            function renderTable() {
+                const tbody = document.getElementById('rulesBody');
+                tbody.innerHTML = '';
+
+                extractedRules.forEach((rule, index) => {
+                    // Haupzeile
+                    const trMain = document.createElement('tr');
+                    trMain.className = 'main-row';
+                    trMain.onclick = () => toggleDetail(index);
+
+                    const tdToggle = document.createElement('td');
+                    tdToggle.className = 'toggle-col';
+                    tdToggle.id = `icon-${index}`;
+                    tdToggle.textContent = '▶';
+
+                    const tdId = document.createElement('td');
+                    tdId.className = 'id-col';
+                    tdId.textContent = rule.id;
+
+                    const tdRule = document.createElement('td');
+                    tdRule.textContent = rule.text;
+
+                    trMain.appendChild(tdToggle);
+                    trMain.appendChild(tdId);
+                    trMain.appendChild(tdRule);
+                    tbody.appendChild(trMain);
+
+                    // Detailzeile (standardmäßig ausgeblendet)
+                    const trDetail = document.createElement('tr');
+                    trDetail.className = 'detail-row';
+                    trDetail.id = `detail-${index}`;
+                    trDetail.style.display = 'none';
+
+                    const tdDetail = document.createElement('td');
+                    tdDetail.colSpan = 3;
+
+                    tdDetail.innerHTML = `
+        <div class="detail-content">
+          <div class="detail-block">
+            <strong>Kontext (rule context)</strong>
+            <code>${escapeHtml(rule.context)}</code>
+          </div>
+          <div class="detail-block">
+            <strong>Geprüfte Bedingung (${rule.type} test)</strong>
+            <code>${escapeHtml(rule.test)}</code>
+          </div>
+        </div>
+      `;
+
+                    trDetail.appendChild(tdDetail);
+                    tbody.appendChild(trDetail);
+                });
+            }
+
+            // Aus- und Einklappen steuern
+            function toggleDetail(index) {
+                const detailRow = document.getElementById(`detail-${index}`);
+                const icon = document.getElementById(`icon-${index}`);
+
+                if (detailRow.style.display === 'none') {
+                    detailRow.style.display = 'table-row';
+                    icon.textContent = '▼';
+                } else {
+                    detailRow.style.display = 'none';
+                    icon.textContent = '▶';
+                }
+            }
+
+            // Helper zum Maskieren von HTML-Sonderzeichen
+            function escapeHtml(str) {
+                return str
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            // Sortier-Pfeile im Header aktualisieren
+            function updateSortIcons() {
+                const iconId = document.getElementById('sortIconId');
+                const iconText = document.getElementById('sortIconText');
+
+                iconId.textContent = currentSortColumn === 'id' ? (currentSortOrder === 'asc' ? '▲' : '▼') : '↕';
+                iconText.textContent = currentSortColumn === 'text' ? (currentSortOrder === 'asc' ? '▲' : '▼') : '↕';
+            }
+
+            // Kopieren im Markdown-Format
+            function copyAsMarkdown() {
+                if (extractedRules.length === 0) {
+                    alert('Es gibt keine Daten zum Kopieren.');
+                    return;
+                }
+
+                let markdown = '| ID | Rule |\n|---|---|\n';
+                extractedRules.forEach(r => {
+                    const cleanText = r.text.replace(/\|/g, '\\|');
+                    markdown += `| ${r.id} | ${cleanText} |\n`;
+                });
+
+                navigator.clipboard
+                    .writeText(markdown)
+                    .then(() => {
+                        alert('Markdown-Tabelle erfolgreich kopiert!');
+                    })
+                    .catch(err => {
+                        alert('Fehler beim Kopieren: ' + err);
+                    });
+            }
+        </script>
+    </body>
+</html>

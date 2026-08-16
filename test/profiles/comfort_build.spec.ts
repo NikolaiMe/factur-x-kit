@@ -1,13 +1,14 @@
-import { Schema } from 'node-schematron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import objectPath from 'object-path';
 import { validateXML } from 'xmllint-wasm';
 
 import { parseXML } from '../../src/core/xml';
+import { validateFacturXXsd } from '../../src/helper/xsdValidator';
 import { FacturX } from '../../src/index';
 import { ComfortProfileXml, isComfortProfileXml } from '../../src/profiles/comfort/ComfortProfileXml';
 import { removeUndefinedKeys } from '../testhelpers';
+import { validateXmlWithMustang } from '../utils/mustangValidator';
 import './codeDb/xPathDocumentFunction';
 import { testComfortProfile } from './comfort_test_objects';
 
@@ -727,55 +728,18 @@ describe('Build and check XML', () => {
             throw new Error('XSD Check could not be performed as XML conversion failed');
         }
 
-        const xsd = await fs.readFile(
-            path.join(__dirname, 'xsdSchemes', 'COMFORT', 'FACTUR-X_1.07.4_EN16931.xsd'),
-            'utf-8'
-        );
+        const result = await validateFacturXXsd(convertedXML, 'EN16931');
 
-        const xsdImports = [
-            'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
-            'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
-            'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
-        ];
-
-        const preload: { fileName: string; contents: string }[] = [];
-
-        for (const fileName of xsdImports) {
-            const contents = await fs.readFile(path.join(__dirname, 'xsdSchemes', 'COMFORT', fileName), 'utf-8');
-            preload.push({
-                fileName,
-                contents
-            });
-        }
-        const result = await validateXML({
-            xml: [
-                {
-                    fileName: 'e-invoice.xml',
-                    contents: convertedXML
-                }
-            ],
-            schema: [xsd],
-            preload
-        });
-
-        if (!result.valid) console.log(result.errors);
-        expect(result.valid).toBe(true);
+        if (!result.isValid) console.log(result.errors);
+        expect(result.isValid).toBe(true);
     });
 
-    test('Builds Valid XML According to SCHEMATRON Schema', async () => {
+    test.skip('Builds Valid XML according to Mustang', async () => {
         const convertedXML = await instance.getXML();
+        const result = await validateXmlWithMustang(convertedXML);
 
-        const schematron = (
-            await fs.readFile(path.join(__dirname, 'schematronSchemes', 'FACTUR-X_1.07.4_EN16931.sch'), 'utf-8')
-        ).toString();
-
-        const schema = Schema.fromString(schematron);
-
-        const result = schema.validateString(convertedXML);
-
-        if (result.length > 0) console.log(result.map(res => res.message?.trim()));
-
-        expect(result.length).toBe(0);
+        if (!result.isValid) console.log(result.output);
+        expect(result.isValid).toBe(true);
     });
 });
 

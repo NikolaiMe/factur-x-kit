@@ -324,11 +324,31 @@ function calculateTaxSum(
     return [taxInInvoiceCurrency, taxInForeignCurrency];
 }
 
-export function totalsCalculator(simpleInvoice: TotalsCalculatorInputType): ComfortProfile {
-    const tradeLineItems = simpleInvoice.invoiceLines.map(createComfortTradeLineItemFromSimpleInput);
+export interface CalculationOnlyInputType {
+    currency: CURRENCY_CODES;
+    invoiceLines: SimpleTradeLineItem[];
+    totals?: {
+        documentLevelAllowancesAndCharges?: DocumentLevelAllowancesAndCharges;
+        taxExemptionReason?: TaxExemptionReason[];
+        optionalTaxCurrency?: ForeignTaxCurrency;
+        roundingAmount?: number;
+        prepaidAmount?: number;
+    };
+}
+
+export interface CalculatedValues {
+    invoiceLines: ComfortTradeLineItem[]; // Hier stecken jetzt die fertigen Zeilen-Summen drin!
+    totals: ComfortProfile['totals']; // Die aggregierten Gesamtsummen
+}
+
+export function calculateValues(input: CalculationOnlyInputType): CalculatedValues {
+    // 1. ZUERST die einzelnen Zeilen berechnen (hier entsteht das lineTotals.netTotal pro Zeile!)
+    const tradeLineItems = input.invoiceLines.map(createComfortTradeLineItemFromSimpleInput);
+
+    // 2. Dann diese berechneten Zeilen für die Gesamtsummen nutzen
     const netSumWithoutAllowancesAndCharges = calculateNetSumWithoutAllowancesAndCharges(tradeLineItems);
     const documentLevelAllowancesAndCharges = createDocumentLevelAllowancesAndCharges(
-        simpleInvoice.totals?.documentLevelAllowancesAndCharges
+        input.totals?.documentLevelAllowancesAndCharges
     );
     const { allowanceTotalAmount, chargeTotalAmount } = calculateAllowanceAndChargeSum(
         documentLevelAllowancesAndCharges
@@ -336,13 +356,9 @@ export function totalsCalculator(simpleInvoice: TotalsCalculatorInputType): Comf
     const taxBreakdown = createTaxBreakdownFromTradeLineItems(
         tradeLineItems,
         documentLevelAllowancesAndCharges,
-        simpleInvoice.totals?.taxExemptionReason
+        input.totals?.taxExemptionReason
     );
-    const taxTotal = calculateTaxSum(
-        taxBreakdown,
-        simpleInvoice.document.currency,
-        simpleInvoice.totals?.optionalTaxCurrency
-    );
+    const taxTotal = calculateTaxSum(taxBreakdown, input.currency, input.totals?.optionalTaxCurrency);
     const netTotal = round(netSumWithoutAllowancesAndCharges - allowanceTotalAmount + chargeTotalAmount, 2);
     const grossTotal = round(netTotal + taxTotal[0].amount, 2);
 
@@ -354,18 +370,31 @@ export function totalsCalculator(simpleInvoice: TotalsCalculatorInputType): Comf
         netTotal,
         taxBreakdown,
         taxTotal,
-        taxCurrency: simpleInvoice.totals?.optionalTaxCurrency?.taxCurrency,
+        taxCurrency: input.totals?.optionalTaxCurrency?.taxCurrency as CURRENCY_CODES | undefined,
         grossTotal,
-        prepaidAmount: simpleInvoice.totals?.prepaidAmount,
-        roundingAmount: simpleInvoice.totals?.roundingAmount,
-        openAmount:
-            grossTotal - (simpleInvoice.totals?.prepaidAmount || 0) + (simpleInvoice.totals?.roundingAmount || 0)
+        prepaidAmount: input.totals?.prepaidAmount,
+        roundingAmount: input.totals?.roundingAmount,
+        openAmount: grossTotal - (input.totals?.prepaidAmount || 0) + (input.totals?.roundingAmount || 0)
     };
+
+    return {
+        invoiceLines: tradeLineItems,
+        totals
+    };
+}
+
+export function totalsCalculator(simpleInvoice: TotalsCalculatorInputType): ComfortProfile {
+    // Hol dir die komplett berechneten Zeilen und die Gesamtsummen
+    const { invoiceLines, totals } = calculateValues({
+        currency: simpleInvoice.document.currency,
+        invoiceLines: simpleInvoice.invoiceLines,
+        totals: simpleInvoice.totals
+    });
 
     return {
         ...simpleInvoice,
         profile: PROFILES.COMFORT,
-        invoiceLines: tradeLineItems,
-        totals
+        invoiceLines, // Die Zeilen haben jetzt alle fertigen Summen
+        totals // Das Gesamtdokument hat alle Steuern & Summen
     };
 }

@@ -1,4 +1,3 @@
-import { Schema } from 'node-schematron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import objectPath from 'object-path';
@@ -11,6 +10,7 @@ import {
     isBasicWithoutLinesProfileXml
 } from '../../src/profiles/basicwithoutlines/BasicWithoutLinesProfileXml';
 import { removeUndefinedKeys } from '../testhelpers';
+import { validateXmlWithMustang } from '../utils/mustangValidator';
 import testBasicWLProfile from './basicwithoutlines_test_objects';
 import './codeDb/xPathDocumentFunction';
 
@@ -617,17 +617,12 @@ describe('Build and check XML', () => {
         expect(result.valid).toBe(true);
     });
 
-    test('Builds Valid XML According to SCHEMATRON Schema', async () => {
+    test('Builds Valid XML according to Mustang', async () => {
         const convertedXML = await instance.getXML();
-        const schematron = (
-            await fs.readFile(path.join(__dirname, 'schematronSchemes', 'FACTUR-X_1.07.4_BASIC-WL.sch'), 'utf-8')
-        ).toString();
+        const result = await validateXmlWithMustang(convertedXML);
 
-        const schema = Schema.fromString(schematron);
-        const result = schema.validateString(convertedXML);
-        if (result.length > 0) console.log(result.map(res => res.message?.trim()));
-
-        expect(result.length).toBe(0);
+        if (!result.isValid) console.log(result.output);
+        expect(result.isValid).toBe(true);
     });
 });
 

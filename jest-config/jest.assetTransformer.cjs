@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
+const path = require('path');
 const mime = require('mime-types');
 
 function generateDataUrlFromFile(filePath) {
@@ -18,10 +19,21 @@ function generateDataUrlFromFile(filePath) {
 }
 
 module.exports = {
-    process(_src, filename, _config, _options) {
-        const dataUrl = generateDataUrlFromFile(filename);
+    process(src, filename) {
+        const ext = path.extname(filename).toLowerCase();
+
+        // 1. Für .icc und .ttf: Bestehende Data-URL Logik
+        if (ext === '.icc' || ext === '.ttf') {
+            const dataUrl = generateDataUrlFromFile(filename);
+            return {
+                code: `module.exports = ${JSON.stringify(dataUrl)};`
+            };
+        }
+
+        // 2. Für .xsd, .xml, .json / .sef.json: Als reinen Text-String zurückgeben
+        // 'src' enthält hier bereits den von Jest eingelesenen Dateiinhalt
         return {
-            code: `module.exports = ${JSON.stringify(dataUrl)};`
+            code: `module.exports = ${JSON.stringify(src)};`
         };
     }
 };

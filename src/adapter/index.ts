@@ -1,11 +1,16 @@
 export {
     TotalsCalculatorInputType,
     zTotalsCalculatorInputType,
-    zSimpleTradeLineItem
+    zSimpleTradeLineItem,
+    ZBasicDocumentLevelTradeAllowanceChargeType_modified
 } from './totalsCalculator/easyInputType';
 export {
     totalsCalculator,
     SimpleTradeLineItem,
-    createComfortTradeLineItemFromSimpleInput
+    createComfortTradeLineItemFromSimpleInput,
+    DocumentLevelAllowancesAndCharges,
+    CalculationOnlyInputType,
+    CalculatedValues,
+    calculateValues
 } from './totalsCalculator/totalsCalculator';
 export { TaxTypeWithTaxRate, TaxTypeWithoutTaxRate } from './totalsCalculator/easyInputType';

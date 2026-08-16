@@ -14,3 +14,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# Local environment variables
+.env

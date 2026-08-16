@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Schema } from 'node-schematron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createAuxiliaryTypeStore, printNode, zodToTs } from 'zod-to-ts';
@@ -13,6 +12,7 @@ import { designTestObject } from './design_test_object';
 import { designTestObject_easy } from './design_test_object_easy';
 import { testDesignObjectKleinunternehmer } from './design_test_object_kleinunternehmer';
 import './profiles/codeDb/xPathDocumentFunction';
+import { validateXmlWithMustang } from './utils/mustangValidator';
 
 // This is just a testcase which helps me printing out the ts-objects which are built from the zod types
 
@@ -73,21 +73,11 @@ describeExternalXml('factur-x validity check for an external BASIC-WL fixture', 
         xml = await fs.readFile(externalBasicWithoutLinesXmlPath!, 'utf-8');
     });
 
-    test('Builds Valid XML According to SCHEMATRON Schema', async () => {
-        const schematron = (
-            await fs.readFile(
-                path.join(__dirname, 'profiles', 'schematronSchemes', 'FACTUR-X_1.07.4_BASIC-WL.sch'),
-                'utf-8'
-            )
-        ).toString();
+    test('Builds Valid XML according to Mustang', async () => {
+        const result = await validateXmlWithMustang(xml);
 
-        const schema = Schema.fromString(schematron);
-
-        const result = schema.validateString(xml);
-
-        if (result.length > 0) console.log(result.map(res => res.message?.trim()));
-
-        expect(result.length).toBe(0);
+        if (!result.isValid) console.log(result.output);
+        expect(result.isValid).toBe(true);
     });
 });
 

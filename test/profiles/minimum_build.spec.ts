@@ -1,4 +1,3 @@
-import { Schema } from 'node-schematron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import objectPath from 'object-path';
@@ -11,6 +10,7 @@ import { isMinimumProfileXml } from '../../src/profiles/minimum/MinimumProfileXm
 import { PROFILES } from '../../src/types/ProfileTypes';
 import { COUNTRY_ID_CODES, CURRENCY_CODES, DOCUMENT_TYPE_CODES, ISO6523_CODES } from '../../src/types/codes';
 import { removeUndefinedKeys } from '../testhelpers';
+import { validateXmlWithMustang } from '../utils/mustangValidator';
 import './codeDb/xPathDocumentFunction';
 
 const testObj: MinimumProfile = {
@@ -233,18 +233,11 @@ describe('Create FacturX Instance from Object', () => {
         expect(result.valid).toBe(true);
     });
 
-    test('Builds Valid XML According to SCHEMATRON Schema', async () => {
-        const schematron = (
-            await fs.readFile(path.join(__dirname, 'schematronSchemes', 'FACTUR-X_1.07.4_MINIMUM.sch'), 'utf-8')
-        ).toString();
+    test('Builds Valid XML according to Mustang', async () => {
+        const result = await validateXmlWithMustang(xml);
 
-        const schema = Schema.fromString(schematron);
-
-        const result = schema.validateString(xml);
-
-        if (result.length > 0) console.log(result);
-
-        expect(result.length).toBe(0);
+        if (!result.isValid) console.log(result.output);
+        expect(result.isValid).toBe(true);
     });
 });
 

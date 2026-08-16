@@ -1,6 +1,3 @@
-import { DOMParser } from '@xmldom/xmldom';
-import { evaluateXPath, evaluateXPathToNumber, evaluateXPathToString } from 'fontoxpath';
-import { Schema } from 'node-schematron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { validateXML } from 'xmllint-wasm';
@@ -13,6 +10,7 @@ import { designTestObject_preCalc } from './design_test_object_preCalc';
 // Wir importieren direkt die Funktion, die eine Zahl zurückgibt
 
 import './profiles/codeDb/xPathDocumentFunction';
+import { validateXmlWithMustang } from './utils/mustangValidator';
 
 describe('calculate totals', () => {
     test.todo('Make proper unit tests for totalsCalculator functions');
@@ -67,14 +65,14 @@ describe('calculate totals', () => {
             }
 
             const xsd = await fs.readFile(
-                path.join(__dirname, 'profiles', 'xsdSchemes', 'COMFORT', 'Factur-X_1.07.3_EN16931.xsd'),
+                path.join(__dirname, 'profiles', 'xsdSchemes', 'COMFORT', 'FACTUR-X_1.07.4_EN16931.xsd'),
                 'utf-8'
             );
 
             const xsdImports = [
-                'Factur-X_1.07.3_EN16931_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
-                'Factur-X_1.07.3_EN16931_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
-                'Factur-X_1.07.3_EN16931_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
+                'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
+                'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
+                'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
             ];
 
             const preload: { fileName: string; contents: string }[] = [];
@@ -103,42 +101,24 @@ describe('calculate totals', () => {
             if (!result.valid) console.log(result.errors);
             expect(result.valid).toBe(true);
         });
+    });
 
-        test('Builds Valid XML According to SCHEMATRON Schema', async () => {
+    describe('Factur-X Validierung mit Mustang', () => {
+        it('sollte valides Factur-X XML erzeugen und mit Mustang bestehen', async () => {
+            // Generiere hier dein XML-String aus deiner Bibliotheks-Logik
             const invoiceData = totalsCalculator(designTestObject_preCalc);
             const instance = await FacturX.fromObject(invoiceData);
 
             const convertedXML = await instance.getXML();
+            console.log('Converted XML:\n', convertedXML);
+            const result = await validateXmlWithMustang(convertedXML);
 
-            console.log(convertedXML);
+            if (!result.isValid) {
+                console.error('Mustang Validierungsbericht:\n', result.output);
+            }
 
-            const schematron = (
-                await fs.readFile(path.join(__dirname, 'profiles', 'schematronSchemes', 'TestSchematon.sch'), 'utf-8')
-            ).toString();
-
-            const schema = Schema.fromString(schematron);
-
-            const result = schema.validateString(convertedXML);
-
-            if (result.length > 0) console.log(result.map(res => res.message?.trim()));
-
-            expect(result.length).toBe(0);
-        });
-
-        test.only('check some fontoxpath stuff', async () => {
-            const testXML = `
-            <invoice>
-                <id>R-12345</id>
-                <sum>99.50</sum>
-                <notes>
-                    <note>Important note</note>
-                    <note>Urgent!</note>
-                </notes>
-            </invoice>`;
-            const dom = new DOMParser().parseFromString(testXML, 'text/xml');
-            const xpathQuery1 = 'string-length(/invoice/id[@scheme])';
-            const result = evaluateXPath(xpathQuery1, dom);
-            console.log(result);
+            // Assertion for Jest
+            expect(result.isValid).toBe(true);
         });
     });
 });

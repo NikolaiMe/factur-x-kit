@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsm:CrossIndustryInvoice xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
+  <rsm:ExchangedDocumentContext>
+    <ram:GuidelineSpecifiedDocumentContextParameter>
+      <ram:ID>urn:cen.eu:en16931:2017</ram:ID>
+    </ram:GuidelineSpecifiedDocumentContextParameter>
+  </rsm:ExchangedDocumentContext>
+  <rsm:ExchangedDocument>
+    <ram:ID>INV-2023-00789</ram:ID>
+    <ram:TypeCode>380</ram:TypeCode>
+    <ram:IssueDateTime>
+      <udt:DateTimeString format="102">20231001</udt:DateTimeString>
+    </ram:IssueDateTime>
+    <ram:IncludedNote>
+      <ram:Content>Thank you for your business! Please find the details of your order below.</ram:Content>
+      <ram:SubjectCode>ACY</ram:SubjectCode>
+    </ram:IncludedNote>
+    <ram:IncludedNote>
+      <ram:Content>Kind regards,
+Your Apex Solutions Team</ram:Content>
+    </ram:IncludedNote>
+    <ram:IncludedNote>
+      <ram:Content>Standard delivery is within 3-5 business days after payment confirmation. For any inquiries, please do not hesitate to contact us.</ram:Content>
+      <ram:SubjectCode>DEL</ram:SubjectCode>
+    </ram:IncludedNote>
+  </rsm:ExchangedDocument>
+  <rsm:SupplyChainTradeTransaction>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>1</ram:LineID>
+        <ram:IncludedNote>
+          <ram:Content>This item is shipped in bulk. A specialized carrier will deliver this separately from other items. Estimated delivery: 3-5 business days.</ram:Content>
+        </ram:IncludedNote>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedTradeProduct>
+        <ram:GlobalID schemeID="0160">GTIN01234567890123</ram:GlobalID>
+        <ram:SellerAssignedID>APX-COMP-001A</ram:SellerAssignedID>
+        <ram:BuyerAssignedID>TECH-REQ-789B</ram:BuyerAssignedID>
+        <ram:Name>Industrial Grade Fasteners</ram:Name>
+        <ram:Description>Precision-engineered stainless steel (Grade 316) fasteners.</ram:Description>
+        <ram:ApplicableProductCharacteristic>
+          <ram:Description>Material</ram:Description>
+          <ram:Value>Stainless Steel 316</ram:Value>
+        </ram:ApplicableProductCharacteristic>
+        <ram:ApplicableProductCharacteristic>
+          <ram:Description>Finish</ram:Description>
+          <ram:Value>Polished</ram:Value>
+        </ram:ApplicableProductCharacteristic>
+        <ram:DesignatedProductClassification>
+          <ram:ClassCode listID="TST" listVersionID="v23.0501">27111708</ram:ClassCode>
+        </ram:DesignatedProductClassification>
+        <ram:DesignatedProductClassification>
+          <ram:ClassCode listID="SSO">C456</ram:ClassCode>
+        </ram:DesignatedProductClassification>
+        <ram:DesignatedProductClassification>
+          <ram:ClassCode listID="TSO">9</ram:ClassCode>
+        </ram:DesignatedProductClassification>
+        <ram:OriginTradeCountry>
+          <ram:ID>GB</ram:ID>
+        </ram:OriginTradeCountry>
+      </ram:SpecifiedTradeProduct>
+      <ram:SpecifiedLineTradeAgreement>
+        <ram:BuyerOrderReferencedDocument>
+          <ram:LineID>CUST-PO-12345-LN10</ram:LineID>
+        </ram:BuyerOrderReferencedDocument>
+        <ram:GrossPriceProductTradePrice>
+          <ram:ChargeAmount>20.0000</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="KGM">1.0000</ram:BasisQuantity>
+          <ram:AppliedTradeAllowanceCharge>
+            <ram:ChargeIndicator>
+              <udt:Indicator>false</udt:Indicator>
+            </ram:ChargeIndicator>
+            <ram:ActualAmount>1.0000</ram:ActualAmount>
+          </ram:AppliedTradeAllowanceCharge>
+        </ram:GrossPriceProductTradePrice>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount>19.0000</ram:ChargeAmount>
+          <ram:BasisQuantity unitCode="KGM">1.0000</ram:BasisQuantity>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedLineTradeAgreement>
+      <ram:SpecifiedLineTradeDelivery>
+        <ram:BilledQuantity unitCode="KGM">5.00</ram:BilledQuantity>
+      </ram:SpecifiedLineTradeDelivery>
+      <ram:SpecifiedLineTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:RateApplicablePercent>19.0000</ram:RateApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:BillingSpecifiedPeriod>
+          <ram:StartDateTime>
+            <udt:DateTimeString format="102">20240101</udt:DateTimeString>
+          </ram:StartDateTime>
+          <ram:EndDateTime>
+            <udt:DateTimeString format="102">20240131</udt:DateTimeString>
+          </ram:EndDateTime>
+        </ram:BillingSpecifiedPeriod>
+        <ram:SpecifiedTradeAllowanceCharge>
+          <ram:ChargeIndicator>
+            <udt:Indicator>false</udt:Indicator>
+          </ram:ChargeIndicator>
+          <ram:ActualAmount>6.00</ram:ActualAmount>
+          <ram:ReasonCode>95</ram:ReasonCode>
+          <ram:Reason>Volume Discount Applied</ram:Reason>
+        </ram:SpecifiedTradeAllowanceCharge>
+        <ram:SpecifiedTradeAllowanceCharge>
+          <ram:ChargeIndicator>
+            <udt:Indicator>true</udt:Indicator>
+          </ram:ChargeIndicator>
+          <ram:ActualAmount>1.00</ram:ActualAmount>
+          <ram:ReasonCode>ZZZ</ram:ReasonCode>
+          <ram:Reason>Special Handling Fee</ram:Reason>
+        </ram:SpecifiedTradeAllowanceCharge>
+        <ram:SpecifiedTradeSettlementLineMonetarySummation>
+          <ram:LineTotalAmount>90.00</ram:LineTotalAmount>
+        </ram:SpecifiedTradeSettlementLineMonetarySummation>
+        <ram:AdditionalReferencedDocument>
+          <ram:IssuerAssignedID>DS-SPEC-003</ram:IssuerAssignedID>
+          <ram:TypeCode>130</ram:TypeCode>
+          <ram:ReferenceTypeCode>DQ</ram:ReferenceTypeCode>
+        </ram:AdditionalReferencedDocument>
+        <ram:ReceivableSpecifiedTradeAccountingAccount>
+          <ram:ID>Cost Center Alpha-100</ram:ID>
+        </ram:ReceivableSpecifiedTradeAccountingAccount>
+      </ram:SpecifiedLineTradeSettlement>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:IncludedSupplyChainTradeLineItem>
+      <ram:AssociatedDocumentLineDocument>
+        <ram:LineID>2</ram:LineID>
+      </ram:AssociatedDocumentLineDocument>
+      <ram:SpecifiedTradeProduct>
+        <ram:Name>Premium Filter Cartridges</ram:Name>
+      </ram:SpecifiedTradeProduct>
+      <ram:SpecifiedLineTradeAgreement>
+        <ram:NetPriceProductTradePrice>
+          <ram:ChargeAmount>15.0000</ram:ChargeAmount>
+        </ram:NetPriceProductTradePrice>
+      </ram:SpecifiedLineTradeAgreement>
+      <ram:SpecifiedLineTradeDelivery>
+        <ram:BilledQuantity unitCode="KGM">2.00</ram:BilledQuantity>
+      </ram:SpecifiedLineTradeDelivery>
+      <ram:SpecifiedLineTradeSettlement>
+        <ram:ApplicableTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:RateApplicablePercent>19.0000</ram:RateApplicablePercent>
+        </ram:ApplicableTradeTax>
+        <ram:SpecifiedTradeAllowanceCharge>
+          <ram:ChargeIndicator>
+            <udt:Indicator>true</udt:Indicator>
+          </ram:ChargeIndicator>
+          <ram:ActualAmount>15.00</ram:ActualAmount>
+          <ram:ReasonCode>ZZZ</ram:ReasonCode>
+          <ram:Reason>Expedited Processing Fee</ram:Reason>
+        </ram:SpecifiedTradeAllowanceCharge>
+        <ram:SpecifiedTradeSettlementLineMonetarySummation>
+          <ram:LineTotalAmount>45.00</ram:LineTotalAmount>
+        </ram:SpecifiedTradeSettlementLineMonetarySummation>
+      </ram:SpecifiedLineTradeSettlement>
+    </ram:IncludedSupplyChainTradeLineItem>
+    <ram:ApplicableHeaderTradeAgreement>
+      <ram:SellerTradeParty>
+        <ram:Name>Apex Solutions Ltd.</ram:Name>
+        <ram:Description>Managing Director: Eleanor Vance
+Registered Office: London
+Registered in England and Wales</ram:Description>
+        <ram:SpecifiedLegalOrganization>
+          <ram:ID>CRN 9876543</ram:ID>
+          <ram:TradingBusinessName>Apex Industrial Supplies</ram:TradingBusinessName>
+        </ram:SpecifiedLegalOrganization>
+        <ram:DefinedTradeContact>
+          <ram:PersonName>David Miller</ram:PersonName>
+          <ram:TelephoneUniversalCommunication>
+            <ram:CompleteNumber>+44 20 7946 0123</ram:CompleteNumber>
+          </ram:TelephoneUniversalCommunication>
+          <ram:EmailURIUniversalCommunication>
+            <ram:URIID>sales@apexsolutions.co.uk</ram:URIID>
+          </ram:EmailURIUniversalCommunication>
+        </ram:DefinedTradeContact>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>EC1A 1BB</ram:PostcodeCode>
+          <ram:LineOne>123 Business Road</ram:LineOne>
+          <ram:CityName>London</ram:CityName>
+          <ram:CountryID>GB</ram:CountryID>
+          <ram:CountrySubDivisionName>ENG</ram:CountrySubDivisionName>
+        </ram:PostalTradeAddress>
+        <ram:SpecifiedTaxRegistration>
+          <ram:ID schemeID="VA">GB987654321</ram:ID>
+        </ram:SpecifiedTaxRegistration>
+      </ram:SellerTradeParty>
+      <ram:BuyerTradeParty>
+        <ram:ID>CUST-00456</ram:ID>
+        <ram:Name>Innovatech Corp.</ram:Name>
+        <ram:DefinedTradeContact>
+          <ram:PersonName>Sarah Chen</ram:PersonName>
+          <ram:TelephoneUniversalCommunication>
+            <ram:CompleteNumber>+1 212 555 0199</ram:CompleteNumber>
+          </ram:TelephoneUniversalCommunication>
+          <ram:EmailURIUniversalCommunication>
+            <ram:URIID>schen@innovatech.com</ram:URIID>
+          </ram:EmailURIUniversalCommunication>
+        </ram:DefinedTradeContact>
+        <ram:PostalTradeAddress>
+          <ram:PostcodeCode>10001</ram:PostcodeCode>
+          <ram:LineOne>456 Innovation Drive</ram:LineOne>
+          <ram:LineTwo>Suite 500</ram:LineTwo>
+          <ram:CityName>New York</ram:CityName>
+          <ram:CountryID>US</ram:CountryID>
+          <ram:CountrySubDivisionName>NY</ram:CountrySubDivisionName>
+        </ram:PostalTradeAddress>
+        <ram:URIUniversalCommunication>
+          <ram:URIID schemeID="0088">accounts.payable@innovatech.com</ram:URIID>
+        </ram:URIUniversalCommunication>
+        <ram:SpecifiedTaxRegistration>
+          <ram:ID schemeID="VA">US-TAXID-7890123</ram:ID>
+        </ram:SpecifiedTaxRegistration>
+      </ram:BuyerTradeParty>
+      <ram:BuyerOrderReferencedDocument>
+        <ram:IssuerAssignedID>PO-2023-10-005</ram:IssuerAssignedID>
+      </ram:BuyerOrderReferencedDocument>
+      <ram:ContractReferencedDocument>
+        <ram:IssuerAssignedID>CTR-SERV-001B</ram:IssuerAssignedID>
+      </ram:ContractReferencedDocument>
+    </ram:ApplicableHeaderTradeAgreement>
+    <ram:ApplicableHeaderTradeDelivery>
+      <ram:ActualDeliverySupplyChainEvent>
+        <ram:OccurrenceDateTime>
+          <udt:DateTimeString format="102">20231005</udt:DateTimeString>
+        </ram:OccurrenceDateTime>
+      </ram:ActualDeliverySupplyChainEvent>
+      <ram:DespatchAdviceReferencedDocument>
+        <ram:IssuerAssignedID>ASN-778899</ram:IssuerAssignedID>
+      </ram:DespatchAdviceReferencedDocument>
+    </ram:ApplicableHeaderTradeDelivery>
+    <ram:ApplicableHeaderTradeSettlement>
+      <ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode>
+      <ram:SpecifiedTradeSettlementPaymentMeans>
+        <ram:TypeCode>58</ram:TypeCode>
+        <ram:Information>International Commerce Bank</ram:Information>
+        <ram:PayeePartyCreditorFinancialAccount>
+          <ram:IBANID>GB29NWBK60161331926819</ram:IBANID>
+          <ram:AccountName>Apex Solutions Ltd.</ram:AccountName>
+        </ram:PayeePartyCreditorFinancialAccount>
+        <ram:PayeeSpecifiedCreditorFinancialInstitution>
+          <ram:BICID>NWBKGB2L</ram:BICID>
+        </ram:PayeeSpecifiedCreditorFinancialInstitution>
+      </ram:SpecifiedTradeSettlementPaymentMeans>
+      <ram:ApplicableTradeTax>
+        <ram:CalculatedAmount>23.09</ram:CalculatedAmount>
+        <ram:TypeCode>VAT</ram:TypeCode>
+        <ram:BasisAmount>121.50</ram:BasisAmount>
+        <ram:CategoryCode>S</ram:CategoryCode>
+        <ram:TaxPointDate>
+          <udt:DateString format="102">20240115</udt:DateString>
+        </ram:TaxPointDate>
+        <ram:RateApplicablePercent>19.0000</ram:RateApplicablePercent>
+      </ram:ApplicableTradeTax>
+      <ram:BillingSpecifiedPeriod>
+        <ram:StartDateTime>
+          <udt:DateTimeString format="102">20240101</udt:DateTimeString>
+        </ram:StartDateTime>
+        <ram:EndDateTime>
+          <udt:DateTimeString format="102">20240131</udt:DateTimeString>
+        </ram:EndDateTime>
+      </ram:BillingSpecifiedPeriod>
+      <ram:SpecifiedTradeAllowanceCharge>
+        <ram:ChargeIndicator>
+          <udt:Indicator>false</udt:Indicator>
+        </ram:ChargeIndicator>
+        <ram:ActualAmount>14.00</ram:ActualAmount>
+        <ram:ReasonCode>95</ram:ReasonCode>
+        <ram:Reason>Loyalty Program Discount</ram:Reason>
+        <ram:CategoryTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:RateApplicablePercent>19.0000</ram:RateApplicablePercent>
+        </ram:CategoryTradeTax>
+      </ram:SpecifiedTradeAllowanceCharge>
+      <ram:SpecifiedTradeAllowanceCharge>
+        <ram:ChargeIndicator>
+          <udt:Indicator>true</udt:Indicator>
+        </ram:ChargeIndicator>
+        <ram:ActualAmount>0.50</ram:ActualAmount>
+        <ram:ReasonCode>FC</ram:ReasonCode>
+        <ram:Reason>Standard Shipping Fee</ram:Reason>
+        <ram:CategoryTradeTax>
+          <ram:TypeCode>VAT</ram:TypeCode>
+          <ram:CategoryCode>S</ram:CategoryCode>
+          <ram:RateApplicablePercent>19.0000</ram:RateApplicablePercent>
+        </ram:CategoryTradeTax>
+      </ram:SpecifiedTradeAllowanceCharge>
+      <ram:SpecifiedTradePaymentTerms>
+        <ram:Description>Payment due within 30 days from date of invoice.</ram:Description>
+        <ram:DueDateDateTime>
+          <udt:DateTimeString format="102">20240201</udt:DateTimeString>
+        </ram:DueDateDateTime>
+      </ram:SpecifiedTradePaymentTerms>
+      <ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+        <ram:LineTotalAmount>105.00</ram:LineTotalAmount>
+        <ram:ChargeTotalAmount>0.50</ram:ChargeTotalAmount>
+        <ram:AllowanceTotalAmount>14.00</ram:AllowanceTotalAmount>
+        <ram:TaxBasisTotalAmount>121.50</ram:TaxBasisTotalAmount>
+        <ram:TaxTotalAmount currencyID="EUR">23.09</ram:TaxTotalAmount>
+        <ram:RoundingAmount>0.01</ram:RoundingAmount>
+        <ram:GrandTotalAmount>140.59</ram:GrandTotalAmount>
+        <ram:TotalPrepaidAmount>10.00</ram:TotalPrepaidAmount>
+        <ram:DuePayableAmount>134.60</ram:DuePayableAmount>
+      </ram:SpecifiedTradeSettlementHeaderMonetarySummation>
+      <ram:InvoiceReferencedDocument>
+        <ram:IssuerAssignedID>PREV-INV-00700</ram:IssuerAssignedID>
+        <ram:FormattedIssueDateTime>
+          <qdt:DateTimeString format="102">20230901</qdt:DateTimeString>
+        </ram:FormattedIssueDateTime>
+      </ram:InvoiceReferencedDocument>
+    </ram:ApplicableHeaderTradeSettlement>
+  </rsm:SupplyChainTradeTransaction>
+</rsm:CrossIndustryInvoice>
