@@ -306,35 +306,19 @@
         </ram:SpecifiedLegalOrganization>
       </ram:PayeeTradeParty>
       <ram:SpecifiedTradeSettlementPaymentMeans>
-        <ram:TypeCode>59</ram:TypeCode>
-        <ram:PayerPartyDebtorFinancialAccount>
-          <ram:IBANID>DE89370400440532013000</ram:IBANID>
-        </ram:PayerPartyDebtorFinancialAccount>
+        <ram:TypeCode>58</ram:TypeCode>
         <ram:PayeePartyCreditorFinancialAccount>
           <ram:IBANID>DE89370400440532013001</ram:IBANID>
-          <ram:ProprietaryID>PAYEE-PROP-1</ram:ProprietaryID>
         </ram:PayeePartyCreditorFinancialAccount>
       </ram:SpecifiedTradeSettlementPaymentMeans>
       <ram:SpecifiedTradeSettlementPaymentMeans>
-        <ram:TypeCode>59</ram:TypeCode>
-        <ram:PayerPartyDebtorFinancialAccount>
-          <ram:IBANID>DE89370400440532013002</ram:IBANID>
-        </ram:PayerPartyDebtorFinancialAccount>
+        <ram:TypeCode>58</ram:TypeCode>
         <ram:PayeePartyCreditorFinancialAccount>
-          <ram:IBANID>DE89370400440532013003</ram:IBANID>
           <ram:ProprietaryID>PAYEE-PROP-2</ram:ProprietaryID>
         </ram:PayeePartyCreditorFinancialAccount>
       </ram:SpecifiedTradeSettlementPaymentMeans>
       <ram:SpecifiedTradeSettlementPaymentMeans>
-        <ram:TypeCode>54</ram:TypeCode>
-        <ram:Information>Credit Card Payment</ram:Information>
-        <ram:ApplicableTradeSettlementFinancialCard>
-          <ram:ID>****1111</ram:ID>
-          <ram:CardholderName>Max Mustermann</ram:CardholderName>
-        </ram:ApplicableTradeSettlementFinancialCard>
-      </ram:SpecifiedTradeSettlementPaymentMeans>
-      <ram:SpecifiedTradeSettlementPaymentMeans>
-        <ram:TypeCode>59</ram:TypeCode>
+        <ram:TypeCode>58</ram:TypeCode>
         <ram:Information>Bank Transfer with BIC</ram:Information>
         <ram:PayeePartyCreditorFinancialAccount>
           <ram:IBANID>DE89370400440532013000</ram:IBANID>

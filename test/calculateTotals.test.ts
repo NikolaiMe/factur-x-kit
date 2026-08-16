@@ -5,12 +5,14 @@ import { validateXML } from 'xmllint-wasm';
 import { FacturX } from '../src';
 import { TotalsCalculatorInputType } from '../src/adapter/totalsCalculator/easyInputType';
 import { totalsCalculator } from '../src/adapter/totalsCalculator/totalsCalculator';
+import { validateFacturXXsd } from '../src/helper/xsdValidator';
+import { validateFacturXXslt } from '../src/helper/xsltValidator';
 import { TAX_CATEGORY_CODES, UNIT_CODES } from '../src/types/codes';
 import { designTestObject_preCalc } from './design_test_object_preCalc';
 // Wir importieren direkt die Funktion, die eine Zahl zurückgibt
 
 import './profiles/codeDb/xPathDocumentFunction';
-import { validateXmlWithMustang } from './utils/mustangValidator';
+import { validatePdfWithMustang, validateXmlWithMustang } from './utils/mustangValidator';
 
 describe('calculate totals', () => {
     test.todo('Make proper unit tests for totalsCalculator functions');
@@ -64,61 +66,39 @@ describe('calculate totals', () => {
                 throw new Error('XSD Check could not be performed as XML conversion failed');
             }
 
-            const xsd = await fs.readFile(
-                path.join(__dirname, 'profiles', 'xsdSchemes', 'COMFORT', 'FACTUR-X_1.07.4_EN16931.xsd'),
-                'utf-8'
-            );
-
-            const xsdImports = [
-                'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
-                'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
-                'FACTUR-X_EN16931_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
-            ];
-
-            const preload: { fileName: string; contents: string }[] = [];
-
-            for (const fileName of xsdImports) {
-                const contents = await fs.readFile(
-                    path.join(__dirname, 'profiles', 'xsdSchemes', 'COMFORT', fileName),
-                    'utf-8'
-                );
-                preload.push({
-                    fileName,
-                    contents
-                });
+            if (!convertedXML) {
+                throw new Error('XSD Check could not be performed as XML conversion failed');
             }
-            const result = await validateXML({
-                xml: [
-                    {
-                        fileName: 'e-invoice.xml',
-                        contents: convertedXML
-                    }
-                ],
-                schema: [xsd],
-                preload
-            });
 
-            if (!result.valid) console.log(result.errors);
-            expect(result.valid).toBe(true);
-        });
-    });
+            const result = await validateFacturXXsd(convertedXML, 'EN16931');
 
-    describe('Factur-X Validierung mit Mustang', () => {
-        it('sollte valides Factur-X XML erzeugen und mit Mustang bestehen', async () => {
-            // Generiere hier dein XML-String aus deiner Bibliotheks-Logik
+            if (!result.isValid) console.log(result.errors);
+            expect(result.isValid).toBe(true);
+        }, 30000);
+
+        test('Check XML against XSLT', async () => {
             const invoiceData = totalsCalculator(designTestObject_preCalc);
             const instance = await FacturX.fromObject(invoiceData);
 
             const convertedXML = await instance.getXML();
-            console.log('Converted XML:\n', convertedXML);
-            const result = await validateXmlWithMustang(convertedXML);
+            const result = await validateFacturXXslt(convertedXML, 'EN16931');
 
             if (!result.isValid) {
-                console.error('Mustang Validierungsbericht:\n', result.output);
+                console.log(result.errors);
+                console.log(result.warnings);
             }
-
-            // Assertion for Jest
             expect(result.isValid).toBe(true);
-        });
+        }, 30000);
     });
+
+    test('Build and validate PDF', async () => {
+        const invoiceData = totalsCalculator(designTestObject_preCalc);
+        const instance = await FacturX.fromObject(invoiceData);
+
+        const pdfBytes = await instance.getPDF();
+        expect(pdfBytes).toBeDefined();
+        await fs.writeFile(path.join(__dirname, 'pdfs', 'createdPDFs', 'CalculatorTests.pdf'), pdfBytes);
+        const result = await validatePdfWithMustang(path.join(__dirname, 'pdfs', 'createdPDFs', 'CalculatorTests.pdf'));
+        expect(result.isValid).toBe(true);
+    }, 30000);
 });

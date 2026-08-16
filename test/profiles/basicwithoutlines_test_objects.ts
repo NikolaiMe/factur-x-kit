@@ -156,14 +156,12 @@ const testBasicWLProfile: BasicWithoutLinesProfile = {
         },
         paymentMeans: [
             {
-                paymentType: PAYMENT_MEANS_CODES.SEPA_direct_debit,
-                payerBankAccount: { iban: 'DE89370400440532013000' },
-                payeeBankAccount: { iban: 'DE89370400440532013001', propriataryId: 'PAYEE-PROP-1' }
+                paymentType: PAYMENT_MEANS_CODES.SEPA_credit_transfer,
+                payeeBankAccount: { iban: 'DE89370400440532013001' }
             },
             {
-                paymentType: PAYMENT_MEANS_CODES.SEPA_direct_debit,
-                payerBankAccount: { iban: 'DE89370400440532013002' },
-                payeeBankAccount: { iban: 'DE89370400440532013003', propriataryId: 'PAYEE-PROP-2' }
+                paymentType: PAYMENT_MEANS_CODES.SEPA_credit_transfer,
+                payeeBankAccount: { propriataryId: 'PAYEE-PROP-2' }
             }
         ],
         paymentTerms: {

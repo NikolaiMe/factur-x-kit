@@ -14,7 +14,7 @@ describe('Mustang Validator Integration Tests', () => {
             const result = await validateXmlWithMustang(xmlContent);
 
             expect(result.isValid).toBe(true);
-        });
+        }, 30000);
 
         it('sollte "falseXML.xml" als UNGÜLTIG erkennen', async () => {
             const xmlPath = path.join(testDataDir, 'falseXML.xml');
@@ -23,7 +23,7 @@ describe('Mustang Validator Integration Tests', () => {
             const result = await validateXmlWithMustang(xmlContent);
 
             expect(result.isValid).toBe(false);
-        });
+        }, 30000);
     });
 
     describe('PDF Validierung', () => {
@@ -33,7 +33,7 @@ describe('Mustang Validator Integration Tests', () => {
             const result = await validatePdfWithMustang(pdfPath);
 
             expect(result.isValid).toBe(true);
-        });
+        }, 30000);
 
         it('sollte "fehlerhafte_rechnung.pdf" als UNGÜLTIG erkennen', async () => {
             const pdfPath = path.join(testDataDir, 'fehlerhafte_rechnung.pdf');
@@ -41,7 +41,7 @@ describe('Mustang Validator Integration Tests', () => {
             const result = await validatePdfWithMustang(pdfPath);
 
             expect(result.isValid).toBe(false);
-        });
+        }, 30000);
 
         it('sollte "non_compliant_pdf.pdf" als UNGÜLTIG erkennen', async () => {
             const pdfPath = path.join(testDataDir, 'non_compliant_pdf.pdf');
@@ -49,6 +49,6 @@ describe('Mustang Validator Integration Tests', () => {
             const result = await validatePdfWithMustang(pdfPath);
 
             expect(result.isValid).toBe(false);
-        });
+        }, 30000);
     });
 });

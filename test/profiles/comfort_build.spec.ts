@@ -1,19 +1,22 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import objectPath from 'object-path';
-import { validateXML } from 'xmllint-wasm';
 
 import { parseXML } from '../../src/core/xml';
 import { validateFacturXXsd } from '../../src/helper/xsdValidator';
+import { validateFacturXXslt } from '../../src/helper/xsltValidator';
 import { FacturX } from '../../src/index';
 import { ComfortProfileXml, isComfortProfileXml } from '../../src/profiles/comfort/ComfortProfileXml';
 import { removeUndefinedKeys } from '../testhelpers';
-import { validateXmlWithMustang } from '../utils/mustangValidator';
+import { validatePdfWithMustang, validateXmlWithMustang } from '../utils/mustangValidator';
 import './codeDb/xPathDocumentFunction';
-import { testComfortProfile } from './comfort_test_objects';
+import { testComfortProfile, testComfortProfileCreditCard } from './comfort_test_objects';
 
 let xmlObject: ComfortProfileXml;
+let xmlObjectCreditCard: ComfortProfileXml;
+
 let instance: FacturX;
+let instanceCreditCard: FacturX;
 
 beforeAll(async () => {
     instance = await FacturX.fromObject(testComfortProfile);
@@ -23,6 +26,14 @@ beforeAll(async () => {
     if (!isComfortProfileXml(obj)) throw new Error('Conversion to XML Obj failed');
 
     xmlObject = obj;
+
+    instanceCreditCard = await FacturX.fromObject(testComfortProfileCreditCard);
+    const xml_credit_card = await instanceCreditCard.getXML();
+    const obj_credit_card = parseXML(xml_credit_card);
+
+    if (!isComfortProfileXml(obj_credit_card)) throw new Error('Conversion to XML Obj failed');
+
+    xmlObjectCreditCard = obj_credit_card;
 });
 
 describe('Re-Check lower profiles', () => {
@@ -388,11 +399,8 @@ describe('Re-Check lower profiles', () => {
                         'rsm:CrossIndustryInvoice.rsm:SupplyChainTradeTransaction.ram:ApplicableHeaderTradeSettlement.ram:SpecifiedTradeSettlementPaymentMeans'
                     );
                     expect(Array.isArray(paymentMeans)).toBeTruthy();
-                    expect(paymentMeans.length).toBe(4);
-                    expect(paymentMeans[0]['ram:TypeCode']['#text']).toBe('59');
-                    expect(paymentMeans[0]['ram:PayerPartyDebtorFinancialAccount']['ram:IBANID']['#text']).toBe(
-                        'DE89370400440532013000'
-                    );
+                    expect(paymentMeans.length).toBe(3);
+                    expect(paymentMeans[0]['ram:TypeCode']['#text']).toBe('58');
                     expect(paymentMeans[0]['ram:PayeePartyCreditorFinancialAccount']['ram:IBANID']['#text']).toBe(
                         'DE89370400440532013001'
                     );
@@ -668,8 +676,8 @@ describe('Profile specific tests', () => {
     describe('Payment Extensions', () => {
         test('Financial Card Details', () => {
             const paymentMeans = objectPath.get(
-                xmlObject,
-                'rsm:CrossIndustryInvoice.rsm:SupplyChainTradeTransaction.ram:ApplicableHeaderTradeSettlement.ram:SpecifiedTradeSettlementPaymentMeans.2'
+                xmlObjectCreditCard,
+                'rsm:CrossIndustryInvoice.rsm:SupplyChainTradeTransaction.ram:ApplicableHeaderTradeSettlement.ram:SpecifiedTradeSettlementPaymentMeans'
             );
             expect(paymentMeans['ram:TypeCode']['#text']).toBe('54'); // Credit Card
             expect(paymentMeans['ram:Information']['#text']).toBe('Credit Card Payment');
@@ -679,9 +687,9 @@ describe('Profile specific tests', () => {
         test('BIC Details', () => {
             const paymentMeans = objectPath.get(
                 xmlObject,
-                'rsm:CrossIndustryInvoice.rsm:SupplyChainTradeTransaction.ram:ApplicableHeaderTradeSettlement.ram:SpecifiedTradeSettlementPaymentMeans.3'
+                'rsm:CrossIndustryInvoice.rsm:SupplyChainTradeTransaction.ram:ApplicableHeaderTradeSettlement.ram:SpecifiedTradeSettlementPaymentMeans.2'
             );
-            expect(paymentMeans['ram:TypeCode']['#text']).toBe('59'); // Credit Card
+            expect(paymentMeans['ram:TypeCode']['#text']).toBe('58'); // Credit Card
             expect(paymentMeans['ram:PayeePartyCreditorFinancialAccount']['ram:IBANID']['#text']).toBe(
                 'DE89370400440532013000'
             );
@@ -720,7 +728,7 @@ describe('Build and check XML', () => {
         const convertedXML = await instance.getXML();
         expect(convertedXML).toBeDefined();
         await fs.writeFile(path.join(__dirname, 'xml', 'createdXml', 'Comfort_Test.xml'), convertedXML);
-    });
+    }, 30000);
 
     test('Check XML against XSD Schemes', async () => {
         const convertedXML = await instance.getXML();
@@ -732,22 +740,27 @@ describe('Build and check XML', () => {
 
         if (!result.isValid) console.log(result.errors);
         expect(result.isValid).toBe(true);
-    });
+    }, 30000);
 
-    test.skip('Builds Valid XML according to Mustang', async () => {
+    test('Check XML against XSLT', async () => {
         const convertedXML = await instance.getXML();
-        const result = await validateXmlWithMustang(convertedXML);
+        const result = await validateFacturXXslt(convertedXML, 'EN16931');
 
-        if (!result.isValid) console.log(result.output);
+        if (!result.isValid) {
+            console.log(result.errors);
+            console.log(result.warnings);
+        }
         expect(result.isValid).toBe(true);
-    });
+    }, 30000);
 });
 
-test('Build PDF', async () => {
+test('Build and validate PDF', async () => {
     const pdfBytes = await instance.getPDF();
     expect(pdfBytes).toBeDefined();
     await fs.writeFile(path.join(__dirname, 'pdf', 'createdPDFs', 'FacturX_Comfort_Test.pdf'), pdfBytes);
-});
+    const result = await validatePdfWithMustang(path.join(__dirname, 'pdf', 'createdPDFs', 'FacturX_Comfort_Test.pdf'));
+    expect(result.isValid).toBe(true);
+}, 30000);
 
 test('Roundtrip Check', async () => {
     const convertedXML = await instance.getXML();

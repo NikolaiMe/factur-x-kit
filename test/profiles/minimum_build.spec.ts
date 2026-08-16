@@ -1,16 +1,17 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import objectPath from 'object-path';
-import { validateXML } from 'xmllint-wasm';
 
 import { parseXML } from '../../src/core/xml';
+import { validateFacturXXsd } from '../../src/helper/xsdValidator';
+import { validateFacturXXslt } from '../../src/helper/xsltValidator';
 import { FacturX } from '../../src/index';
 import { MinimumProfile } from '../../src/profiles/minimum/MinimumProfile';
 import { isMinimumProfileXml } from '../../src/profiles/minimum/MinimumProfileXml';
 import { PROFILES } from '../../src/types/ProfileTypes';
 import { COUNTRY_ID_CODES, CURRENCY_CODES, DOCUMENT_TYPE_CODES, ISO6523_CODES } from '../../src/types/codes';
 import { removeUndefinedKeys } from '../testhelpers';
-import { validateXmlWithMustang } from '../utils/mustangValidator';
+import { validatePdfWithMustang } from '../utils/mustangValidator';
 import './codeDb/xPathDocumentFunction';
 
 const testObj: MinimumProfile = {
@@ -195,51 +196,46 @@ describe('Create FacturX Instance from Object', () => {
             )
         ).toBe('238.00');
     });
+});
 
-    test('Builds Valid XML According to XSD Schema', async () => {
-        const xsd = await fs.readFile(
-            path.join(__dirname, 'xsdSchemes', 'MINIMUM', 'FACTUR-X_1.07.4_MINIMUM.xsd'),
-            'utf-8'
-        );
-
-        // xs:import references need to be loaded into wasm
-        const xsdImports = [
-            'FACTUR-X_MINIMUM_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
-            'FACTUR-X_MINIMUM_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
-            'FACTUR-X_MINIMUM_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
-        ];
-
-        const preload: { fileName: string; contents: string }[] = [];
-
-        for (const fileName of xsdImports) {
-            const contents = await fs.readFile(path.join(__dirname, 'xsdSchemes', 'MINIMUM', fileName), 'utf-8');
-            preload.push({
-                fileName,
-                contents
-            });
-        }
-
-        const result = await validateXML({
-            xml: [
-                {
-                    fileName: 'e-invoice.xml',
-                    contents: xml
-                }
-            ],
-            schema: [xsd],
-            preload
-        });
-
-        expect(result.valid).toBe(true);
+describe('Build and check XML', () => {
+    test('Build XML succeeds', async () => {
+        const convertedXML = await instance.getXML();
+        expect(convertedXML).toBeDefined();
+        await fs.writeFile(path.join(__dirname, 'xml', 'createdXml', 'Minimum_Test.xml'), convertedXML);
     });
 
-    test('Builds Valid XML according to Mustang', async () => {
-        const result = await validateXmlWithMustang(xml);
+    test('Check XML against XSD Schemes', async () => {
+        const convertedXML = await instance.getXML();
+        if (!convertedXML) {
+            throw new Error('XSD Check could not be performed as XML conversion failed');
+        }
 
-        if (!result.isValid) console.log(result.output);
+        const result = await validateFacturXXsd(convertedXML, 'MINIMUM');
+
+        if (!result.isValid) console.log(result.errors);
+        expect(result.isValid).toBe(true);
+    });
+
+    test('Check XML against XSLT', async () => {
+        const convertedXML = await instance.getXML();
+        const result = await validateFacturXXslt(convertedXML, 'MINIMUM');
+
+        if (!result.isValid) {
+            console.log(result.errors);
+            console.log(result.warnings);
+        }
         expect(result.isValid).toBe(true);
     });
 });
+
+test('Build and validate PDF', async () => {
+    const pdfBytes = await instance.getPDF();
+    expect(pdfBytes).toBeDefined();
+    await fs.writeFile(path.join(__dirname, 'pdf', 'createdPDFs', 'FacturX_MINIMUM_Test.pdf'), pdfBytes);
+    const result = await validatePdfWithMustang(path.join(__dirname, 'pdf', 'createdPDFs', 'FacturX_MINIMUM_Test.pdf'));
+    expect(result.isValid).toBe(true);
+}, 30000);
 
 test('Roundtrip Check', async () => {
     const convertedXML = await instance.getXML();

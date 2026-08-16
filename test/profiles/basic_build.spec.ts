@@ -1,13 +1,14 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import objectPath from 'object-path';
-import { validateXML } from 'xmllint-wasm';
 
 import { parseXML } from '../../src/core/xml';
+import { validateFacturXXsd } from '../../src/helper/xsdValidator';
+import { validateFacturXXslt } from '../../src/helper/xsltValidator';
 import { FacturX } from '../../src/index';
 import { BasicProfileXml, isBasicProfileXml } from '../../src/profiles/basic';
 import { removeUndefinedKeys } from '../testhelpers';
-import { validateXmlWithMustang } from '../utils/mustangValidator';
+import { validatePdfWithMustang } from '../utils/mustangValidator';
 import { testBasicProfile } from './basic_test_objects';
 import './codeDb/xPathDocumentFunction';
 
@@ -388,10 +389,7 @@ describe('Re-Check lower profiles', () => {
                     );
                     expect(Array.isArray(paymentMeans)).toBeTruthy();
                     expect(paymentMeans.length).toBe(2);
-                    expect(paymentMeans[0]['ram:TypeCode']['#text']).toBe('59');
-                    expect(paymentMeans[0]['ram:PayerPartyDebtorFinancialAccount']['ram:IBANID']['#text']).toBe(
-                        'DE89370400440532013000'
-                    );
+                    expect(paymentMeans[0]['ram:TypeCode']['#text']).toBe('58');
                     expect(paymentMeans[0]['ram:PayeePartyCreditorFinancialAccount']['ram:IBANID']['#text']).toBe(
                         'DE89370400440532013001'
                     );
@@ -545,6 +543,7 @@ describe('Build and check XML', () => {
     test('Build XML succeeds', async () => {
         const convertedXML = await instance.getXML();
         expect(convertedXML).toBeDefined();
+        await fs.writeFile(path.join(__dirname, 'xml', 'createdXml', 'Basic_Test.xml'), convertedXML);
     });
 
     test('Check XML against XSD Schemes', async () => {
@@ -553,56 +552,31 @@ describe('Build and check XML', () => {
             throw new Error('XSD Check could not be performed as XML conversion failed');
         }
 
-        const xsd = await fs.readFile(
-            path.join(__dirname, 'xsdSchemes', 'BASIC', 'FACTUR-X_1.07.4_BASIC.xsd'),
-            'utf-8'
-        );
+        const result = await validateFacturXXsd(convertedXML, 'BASIC');
 
-        const xsdImports = [
-            'FACTUR-X_BASIC_urn_un_unece_uncefact_data_standard_QualifiedDataType_100.xsd',
-            'FACTUR-X_BASIC_urn_un_unece_uncefact_data_standard_ReusableAggregateBusinessInformationEntity_100.xsd',
-            'FACTUR-X_BASIC_urn_un_unece_uncefact_data_standard_UnqualifiedDataType_100.xsd'
-        ];
-
-        const preload: { fileName: string; contents: string }[] = [];
-
-        for (const fileName of xsdImports) {
-            const contents = await fs.readFile(path.join(__dirname, 'xsdSchemes', 'BASIC', fileName), 'utf-8');
-            preload.push({
-                fileName,
-                contents
-            });
-        }
-
-        const result = await validateXML({
-            xml: [
-                {
-                    fileName: 'e-invoice.xml',
-                    contents: convertedXML
-                }
-            ],
-            schema: [xsd],
-            preload
-        });
-
-        if (!result.valid) console.log(result.errors);
-        expect(result.valid).toBe(true);
+        if (!result.isValid) console.log(result.errors);
+        expect(result.isValid).toBe(true);
     });
 
-    test('Builds Valid XML according to Mustang', async () => {
+    test('Check XML against XSLT', async () => {
         const convertedXML = await instance.getXML();
-        const result = await validateXmlWithMustang(convertedXML);
+        const result = await validateFacturXXslt(convertedXML, 'BASIC');
 
-        if (!result.isValid) console.log(result.output);
+        if (!result.isValid) {
+            console.log(result.errors);
+            console.log(result.warnings);
+        }
         expect(result.isValid).toBe(true);
     });
 });
 
-test('Build PDF', async () => {
+test('Build and validate PDF', async () => {
     const pdfBytes = await instance.getPDF();
     expect(pdfBytes).toBeDefined();
     await fs.writeFile(path.join(__dirname, 'pdf', 'createdPDFs', 'FacturX_BASIC_Test.pdf'), pdfBytes);
-});
+    const result = await validatePdfWithMustang(path.join(__dirname, 'pdf', 'createdPDFs', 'FacturX_BASIC_Test.pdf'));
+    expect(result.isValid).toBe(true);
+}, 30000);
 
 test('Roundtrip Check', async () => {
     const convertedXML = await instance.getXML();

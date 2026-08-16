@@ -258,16 +258,8 @@ export const testComfortProfile: ComfortProfile = {
         paymentMeans: [
             ...testBasicProfile.paymentInformation.paymentMeans!,
             {
-                description: 'Credit Card Payment',
-                paymentType: PAYMENT_MEANS_CODES.Credit_card,
-                financialCard: {
-                    finalDigitsOfCard: '****1111',
-                    cardholderName: 'Max Mustermann'
-                }
-            },
-            {
                 description: 'Bank Transfer with BIC',
-                paymentType: PAYMENT_MEANS_CODES.SEPA_direct_debit,
+                paymentType: PAYMENT_MEANS_CODES.SEPA_credit_transfer,
                 payeeBankAccount: {
                     iban: 'DE89370400440532013000',
                     bic: 'DEUTDEDBFRA',
@@ -301,4 +293,22 @@ export const testComfortProfile: ComfortProfile = {
         openAmount: 144.6
     },
     invoiceLines: [lineObject1, lineObject2]
+};
+
+export const testComfortProfileCreditCard: ComfortProfile = {
+    ...testComfortProfile,
+
+    paymentInformation: {
+        ...testComfortProfile.paymentInformation,
+        paymentMeans: [
+            {
+                description: 'Credit Card Payment',
+                paymentType: PAYMENT_MEANS_CODES.Credit_card,
+                financialCard: {
+                    finalDigitsOfCard: '****1111',
+                    cardholderName: 'Max Mustermann'
+                }
+            }
+        ]
+    }
 };
