@@ -1,12 +1,10 @@
+import { validateFacturXXsd, validateFacturXXslt } from 'factur-x-kit-validator';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { validateXML } from 'xmllint-wasm';
 
 import { FacturX } from '../src';
 import { TotalsCalculatorInputType } from '../src/adapter/totalsCalculator/easyInputType';
 import { totalsCalculator } from '../src/adapter/totalsCalculator/totalsCalculator';
-import { validateFacturXXsd } from '../src/helper/xsdValidator';
-import { validateFacturXXslt } from '../src/helper/xsltValidator';
 import { TAX_CATEGORY_CODES, UNIT_CODES } from '../src/types/codes';
 import { designTestObject_preCalc } from './design_test_object_preCalc';
 // Wir importieren direkt die Funktion, die eine Zahl zurückgibt

@@ -1,10 +1,9 @@
+import { validateFacturXXsd, validateFacturXXslt } from 'factur-x-kit-validator';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import objectPath from 'object-path';
 
 import { parseXML } from '../../src/core/xml';
-import { validateFacturXXsd } from '../../src/helper/xsdValidator';
-import { validateFacturXXslt } from '../../src/helper/xsltValidator';
 import { FacturX } from '../../src/index';
 import { BasicProfileXml, isBasicProfileXml } from '../../src/profiles/basic';
 import { removeUndefinedKeys } from '../testhelpers';

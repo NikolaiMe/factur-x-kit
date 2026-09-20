@@ -1,9 +1,6 @@
 import objectPath from 'object-path';
 import { PDFDocument } from 'pdf-lib';
 
-import { FacturXProfile } from '../facturxRegistry';
-import { XsdValidationResult, validateFacturXXsd } from '../helper/xsdValidator';
-import { XsltValidationResult, validateFacturXXslt } from '../helper/xsltValidator';
 import { FacturXKitPDFTemplate, HeaderImageType, SupportedLocales } from '../pdfTemplates/types';
 import { BasicProfile, isBasicProfile } from '../profiles/basic/BasicProfile';
 import { BasicProfileConverter } from '../profiles/basic/BasicProfileConverter';
@@ -29,59 +26,6 @@ export type availableConverters =
     | ComfortProfileConverter
     | ExtendedProfileConverter;
 
-/**
- * Accepted input formats for schema validation (PDF or XML data)
- */
-export type ValidatableInput = string | Buffer | Uint8Array | ArrayBuffer;
-
-/**
- * Configuration options for Factur-X schema validation
- */
-export interface ValidationOptions {
-    /** Whether to validate against the official XSD schema (default: true) */
-    checkXsd?: boolean;
-    /** Whether to validate against the official Schematron / XSLT business rules (default: true) */
-    checkSchematron?: boolean;
-}
-
-export type IssueSeverity = 'fatal' | 'error' | 'warning' | 'info';
-export type IssueType = 'xsd' | 'schematron' | 'general';
-
-/**
- * Normalized validation issue representing either an XSD error, a Schematron rule violation, or a general error
- */
-export interface FacturXValidationIssue {
-    type: IssueType;
-    severity: IssueSeverity;
-    message: string;
-    /** Schematron rule ID, e.g. 'BR-CO-04' (only present for Schematron issues) */
-    code?: string;
-    /** Target XPath location (Schematron) or element name (XSD) */
-    location?: string;
-    /** Line number in the XML document (only present for XSD errors) */
-    line?: number;
-    /** Schematron assertion test expression */
-    test?: string;
-    /** Unprocessed raw error output */
-    raw?: string;
-}
-
-/**
- * Aggregated result of the Factur-X validation process
- */
-export interface FacturXValidationReport {
-    /** True if the document contains neither 'fatal' nor 'error' severity issues */
-    isValid: boolean;
-    /** The detected Factur-X profile */
-    profile: FacturXProfile;
-    /** List of all normalized issues (errors, warnings, reports) */
-    issues: FacturXValidationIssue[];
-    /** Detailed XSD validation result for deep inspection */
-    xsdResult?: XsdValidationResult;
-    /** Detailed Schematron/XSLT validation result for deep inspection */
-    xsltResult?: XsltValidationResult;
-}
-
 export class FacturX {
     private profile: availableProfiles;
     private converter: availableConverters;
@@ -102,17 +46,6 @@ export class FacturX {
     }
 
     /**
-     * Validates the generated Factur-X XML of this instance against official XSD schemas and Schematron rules.
-     *
-     * @param options - Options to toggle XSD and Schematron checks
-     * @returns A structured validation report
-     */
-    public async validateSchema(options?: ValidationOptions): Promise<FacturXValidationReport> {
-        const xml = await this.getXML();
-        return FacturX.validateXMLString(xml, options);
-    }
-
-    /**
      * Validates the internal TypeScript data of this instance.
      *
      * @returns A validation result for the current profile structure
@@ -121,9 +54,7 @@ export class FacturX {
         return this.converter.validateProfile(this.profile);
     }
 
-    /**
-     * @deprecated Use `checkObject()` to validate TypeScript data structures, or `validateSchema()` for official XSD/Schematron schema validation.
-     */
+    /** @deprecated Use `checkObject()` to validate TypeScript data structures. */
     public validate(): validationResult {
         return this.checkObject();
     }
@@ -322,196 +253,5 @@ export class FacturX {
             valid: false,
             errors: [{ message: 'Unknown or Not Implemented Profile given', path: [] }]
         };
-    }
-
-    /**
-     * Validates a Factur-X XML string/buffer or a Factur-X PDF document against official XSD schemas and Schematron rules.
-     *
-     * @param input - XML string, XML buffer, or PDF bytes
-     * @param options - Options to toggle XSD and Schematron checks
-     * @returns A structured report containing all detected errors, warnings, and profile information
-     */
-    public static async validate(
-        input: ValidatableInput,
-        options: ValidationOptions = { checkXsd: true, checkSchematron: true }
-    ): Promise<FacturXValidationReport> {
-        let xmlString: string;
-
-        try {
-            if (this.isPdf(input)) {
-                const pdf = await FacturXPdf.createFromFacturXPDF(input);
-                const extractedXml = pdf.extractEmbeddedXML();
-                if (!extractedXml) {
-                    return {
-                        isValid: false,
-                        profile: 'MINIMUM',
-                        issues: [
-                            {
-                                type: 'general',
-                                severity: 'fatal',
-                                message: 'No embedded Factur-X XML found in the provided PDF.'
-                            }
-                        ]
-                    };
-                }
-                xmlString =
-                    typeof extractedXml === 'string' ? extractedXml : Buffer.from(extractedXml).toString('utf-8');
-            } else {
-                xmlString = typeof input === 'string' ? input : Buffer.from(input as ArrayBuffer).toString('utf-8');
-            }
-        } catch (err: any) {
-            return {
-                isValid: false,
-                profile: 'MINIMUM',
-                issues: [
-                    {
-                        type: 'general',
-                        severity: 'fatal',
-                        message: `Failed to read input: ${err.message}`
-                    }
-                ]
-            };
-        }
-
-        return this.validateXMLString(xmlString, options);
-    }
-
-    /**
-     * Performs XSD and Schematron/XSLT validation on a raw XML string.
-     */
-    private static async validateXMLString(
-        xmlString: string,
-        options: ValidationOptions = { checkXsd: true, checkSchematron: true }
-    ): Promise<FacturXValidationReport> {
-        const issues: FacturXValidationIssue[] = [];
-        let profile: FacturXProfile;
-
-        try {
-            profile = this.detectProfileFromXML(xmlString);
-        } catch (err: any) {
-            return {
-                isValid: false,
-                profile: 'MINIMUM',
-                issues: [
-                    {
-                        type: 'general',
-                        severity: 'fatal',
-                        message: `Profile detection failed: ${err.message}`
-                    }
-                ]
-            };
-        }
-
-        let xsdResult: XsdValidationResult | undefined;
-        let xsltResult: XsltValidationResult | undefined;
-
-        // 1. Run XSD schema validation
-        if (options.checkXsd !== false) {
-            xsdResult = await validateFacturXXsd(xmlString, profile);
-            for (const err of xsdResult.errors) {
-                issues.push({
-                    type: 'xsd',
-                    severity: 'error',
-                    message: err.message,
-                    location: err.element,
-                    line: err.line,
-                    raw: err.raw
-                });
-            }
-        }
-
-        // 2. Run Schematron / XSLT business rule validation
-        if (options.checkSchematron !== false) {
-            xsltResult = await validateFacturXXslt(xmlString, profile);
-
-            for (const err of xsltResult.errors) {
-                issues.push({
-                    type: 'schematron',
-                    severity: err.flag === 'fatal' ? 'fatal' : 'error',
-                    message: err.message,
-                    code: err.id,
-                    location: err.location,
-                    test: err.test
-                });
-            }
-
-            for (const warn of xsltResult.warnings) {
-                issues.push({
-                    type: 'schematron',
-                    severity: 'warning',
-                    message: warn.message,
-                    code: warn.id,
-                    location: warn.location,
-                    test: warn.test
-                });
-            }
-
-            for (const rep of xsltResult.reports) {
-                issues.push({
-                    type: 'schematron',
-                    severity: 'info',
-                    message: rep.message,
-                    code: rep.id,
-                    location: rep.location,
-                    test: rep.test
-                });
-            }
-        }
-
-        const areToolsValid = (xsdResult ? xsdResult.isValid : true) && (xsltResult ? xsltResult.isValid : true);
-        const hasBlockingIssues = issues.some(i => i.severity === 'error' || i.severity === 'fatal');
-        const isValid = areToolsValid && !hasBlockingIssues;
-
-        return {
-            isValid,
-            profile,
-            issues,
-            xsdResult,
-            xsltResult
-        };
-    }
-
-    /**
-     * Checks if the input is a PDF by inspecting its magic bytes (%PDF-).
-     */
-    private static isPdf(input: ValidatableInput): boolean {
-        if (typeof input === 'string') {
-            return input.trimStart().startsWith('%PDF-');
-        }
-
-        const buf = Buffer.isBuffer(input) ? input : Buffer.from(input as ArrayBuffer);
-        return (
-            buf.length >= 4 &&
-            buf[0] === 0x25 && // 0x25 is the Hex-Code for '%'
-            buf[1] === 0x50 && // 0x50 is the Hex-Code for 'P'
-            buf[2] === 0x44 && // 0x44 is the Hex-Code for 'D'
-            buf[3] === 0x46 // 0x46 is the Hex-Code for 'F'
-        );
-    }
-
-    /**
-     * Extracts the guideline parameter URN from the XML and maps it to the internal FacturXProfile enum.
-     */
-    private static detectProfileFromXML(xmlString: string): FacturXProfile {
-        const obj = parseXML(xmlString);
-        const profileId = objectPath.get(
-            obj,
-            'rsm:CrossIndustryInvoice.rsm:ExchangedDocumentContext.ram:GuidelineSpecifiedDocumentContextParameter.ram:ID.#text'
-        );
-
-        switch (profileId) {
-            case 'urn:factur-x.eu:1p0:minimum':
-                return 'MINIMUM';
-            case 'urn:factur-x.eu:1p0:basicwl':
-                return 'BASICWL';
-            case 'urn:cen.eu:en16931:2017#compliant#urn:factur-x.eu:1p0:basic':
-                return 'BASIC';
-            case 'urn:cen.eu:en16931:2017':
-                return 'EN16931';
-            case 'urn:cen.eu:en16931:2017#conformant#urn:factur-x.eu:1p0:extended':
-                return 'EXTENDED';
-            default:
-                throw new Error(`Unknown or unsupported Factur-X Profile URN: ${profileId}`);
-        }
     }
 }

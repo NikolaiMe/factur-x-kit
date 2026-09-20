@@ -40,10 +40,11 @@
     ],
     "scripts": {
         "build": "tsup",
+        "build:validator": "npm --prefix ../factur-x-kit-validator run build",
         "code-check": "npx tsx ./skripts/codeComparer.ts",
         "prepare": "husky",
         "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
-        "test": "jest",
+        "test": "npm run build:validator && jest",
         "test:debug": "npx jest --inspect-brk --runInBand",
         "type-check": "tsc --noEmit"
     },
@@ -60,8 +61,6 @@
         "mime-types": "^3.0.2",
         "object-path": "^0.11.8",
         "pdf-lib": "^1.17.1",
-        "saxon-js": "^2.7.0",
-        "xmllint-wasm": "^5.3.0",
         "zod": "^4.4.3"
     },
     "devDependencies": {
@@ -77,6 +76,7 @@
         "eslint": "^10.8.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.6",
+        "factur-x-kit-validator": "file:../factur-x-kit-validator",
         "fontoxpath": "^3.34.0",
         "husky": "^9.1.7",
         "jest": "^30.4.2",
