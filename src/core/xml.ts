@@ -1,4 +1,5 @@
-import { XMLBuilder, XMLParser } from 'fast-xml-parser';
+import XMLBuilder from 'fast-xml-builder';
+import { XMLParser } from 'fast-xml-parser';
 
 const options = {
     ignoreAttributes: false,

@@ -40,18 +40,15 @@ function parseLibxmlError(rawError: string): XsdValidationError {
         raw: rawError
     };
 
-    // Regex to extract line number and element name
-    const match = rawError.match(/:(\d+):\s*(?:element\s+([^:]+):)?\s*(?:Schemas validity error\s*:\s*)?(.*)$/i);
+    const regex = /:(\d+):\s*(?:.*?):\s+(?:Element\s+)?'?(.*?)'?:\s+(.*?)(?:\r?\n|$)/i;
+
+    const match = rawError.match(regex);
 
     if (match) {
         const [, lineNumber, elementName, cleanMessage] = match;
-        if (lineNumber) {
-            error.line = parseInt(lineNumber, 10);
-        }
-        if (elementName) {
-            error.element = elementName.trim();
-        }
-        if (cleanMessage) {
+        if (lineNumber) error.line = parseInt(lineNumber, 10);
+        if (elementName) error.element = elementName.trim();
+        if (cleanMessage && cleanMessage.trim().length > 0) {
             error.message = cleanMessage.trim();
         }
     }

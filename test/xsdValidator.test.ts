@@ -43,6 +43,10 @@ describe('Factur-X XSD Validator - MINIMUM Profile', () => {
         expect(firstError.message).toBeDefined();
         expect(typeof firstError.message).toBe('string');
         expect(firstError.message.length).toBeGreaterThan(0);
+        expect(firstError.element).toBe(
+            '{urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100}TaxTotalAmount'
+        );
+        expect(firstError.line).toBe(123);
 
         // Das geprüfte Profil muss übereinstimmen
         expect(result.profile).toBe('MINIMUM');

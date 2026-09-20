@@ -46,6 +46,7 @@ describe('Factur-X XSLT/Schematron Validator - MINIMUM Profile', () => {
         const firstError = result.errors[0];
         expect(firstError.message).toBeDefined();
         expect(firstError.message).toContain('[BR-CO-09]');
+        expect(firstError.id).toBe('BR-CO-09');
         expect(typeof firstError.message).toBe('string');
         expect(firstError.message.length).toBeGreaterThan(0);
         expect(firstError.flag).toBeDefined(); // z. B. 'fatal' oder 'error'

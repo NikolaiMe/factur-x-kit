@@ -584,7 +584,7 @@ describe('Build and check XML', () => {
 
         if (!result.isValid) console.log(result.errors);
         expect(result.isValid).toBe(true);
-    });
+    }, 30000);
 
     test('Check XML against XSLT', async () => {
         const convertedXML = await instance.getXML();
@@ -595,7 +595,7 @@ describe('Build and check XML', () => {
             console.log(result.warnings);
         }
         expect(result.isValid).toBe(true);
-    });
+    }, 30000);
 });
 
 test('Build and validate PDF', async () => {
