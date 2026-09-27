@@ -31,7 +31,7 @@ export interface SimplifiedMappingItem {
     converter: BaseTypeConverter<any, any>;
 }
 
-export interface validationResult {
+export interface checkResult {
     valid: boolean;
     errors?: { message: string; path: (string | number)[] }[];
 }
@@ -46,7 +46,7 @@ export abstract class Converter<Profile, ProfileXml> {
     protected readonly map: SimplifiedMappingItem[] = [];
     protected abstract isProperXMLScheme(xmlObject: any): xmlObject is ProfileXml;
     protected abstract isProperObjectScheme(object: any): object is Profile;
-    public abstract validateProfile(profile: any): validationResult;
+    public abstract validateProfile(profile: any): checkResult;
 
     xml2obj(xml: object, map: SimplifiedMappingItem[] = this.map): Profile {
         let out: object = {};

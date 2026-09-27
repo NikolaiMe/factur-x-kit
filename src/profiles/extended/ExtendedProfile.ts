@@ -36,7 +36,7 @@ import { BR_O } from '../businessRules/br_o';
 import { BR_OWN } from '../businessRules/br_own';
 import { BR_S } from '../businessRules/br_s';
 import { BR_Z } from '../businessRules/br_z';
-import { validationResult } from '../convert';
+import { checkResult } from '../convert';
 
 const ZExtendedProfileStructure = z.object({
     businessProcessType: ZIdType.optional().describe('BT-23'),
@@ -176,7 +176,7 @@ export function isExtendedProfile(data: unknown): data is ExtendedProfile {
     return result.success;
 }
 
-export function isValidExtendedProfile(data: unknown): validationResult {
+export function isValidExtendedProfile(data: unknown): checkResult {
     const result = ZExtendedProfile.safeParse(data);
     if (!result.success) {
         return {

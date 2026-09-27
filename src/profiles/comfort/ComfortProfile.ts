@@ -37,7 +37,7 @@ import { BR_OWN } from '../businessRules/br_own';
 import { BR_S } from '../businessRules/br_s';
 import { BR_Z } from '../businessRules/br_z';
 import { CII_SR } from '../businessRules/cii_sr';
-import { validationResult } from '../convert';
+import { checkResult } from '../convert';
 
 export const ZComfortTotalsType = z.object({
     sumWithoutAllowancesAndCharges: ZAmountType,
@@ -180,7 +180,7 @@ export function isComfortProfile(data: unknown): data is ComfortProfile {
     return result.success;
 }
 
-export function isValidComfortProfile(data: unknown): validationResult {
+export function isValidComfortProfile(data: unknown): checkResult {
     const result = ZComfortProfile.safeParse(data);
     if (!result.success) {
         return {

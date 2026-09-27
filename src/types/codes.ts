@@ -3,7 +3,6 @@ export enum CURRENCY_CODES {
     Afghani = 'AFN',
     Lek = 'ALL',
     ArmenianDram = 'AMD',
-    NetherlandsAntilleanGuilder = 'ANG',
     Kwanza = 'AOA',
     ArgentinePeso = 'ARS',
     AustralianDollar = 'AUD',
@@ -12,7 +11,6 @@ export enum CURRENCY_CODES {
     ConvertibleMark = 'BAM',
     BarbadosDollar = 'BBD',
     Taka = 'BDT',
-    BulgarianLev = 'BGN',
     BahrainiDinar = 'BHD',
     BurundiFranc = 'BIF',
     BermudianDollar = 'BMD',
@@ -177,7 +175,8 @@ export enum CURRENCY_CODES {
     SierraLeone = 'SLE',
     BolívarSoberanoNewValuation = 'VED',
     ZimbabweGold = 'ZWG',
-    RenminbiOffshore = 'CNH'
+    RenminbiOffshore = 'CNH',
+    CaribbeanGuilder = 'XCG'
 }
 
 export enum UNIT_CODES {
@@ -2988,7 +2987,11 @@ export enum ISO6523_CODES {
     Name_unknown_01 = '0241',
     OpenPeppol_Service_Provider_Identification_Scheme_SPIS = '0242',
     Name_unknown_02 = '0243',
-    Tax_Identification_Nigeria = '0244'
+    Tax_Identification_Nigeria = '0244',
+    Tax_identification_number_DIC_Slovakia = '0245',
+    German_Electronic_Business_Address = '0246',
+    Name_unknown = '0247',
+    Oman_Value_Added_Tax_Identification_Number_VATIN = '0248'
 }
 
 export enum EAS_SCHEME_CODES {
@@ -3089,7 +3092,11 @@ export enum EAS_SCHEME_CODES {
     Odette_International_Limited = '0177',
     UAE_Tax_Identification_Number_TIN = '0235',
     Register_of_legal_persons = '0240',
-    Tax_Identification_Nigeria = '0244'
+    Tax_Identification_Nigeria = '0244',
+    OpenPeppol_Service_Provider_Identification_Scheme_SPIS = '0242',
+    Tax_identification_number_DIC_Slovakia = '0245',
+    German_Electronic_Business_Address = '0246',
+    Oman_Value_Added_Tax_Identification_Number_VATIN = '0248'
 }
 
 export enum TAX_CODES {
@@ -4011,11 +4018,9 @@ export enum MIME_CODES {
     PDF = 'application/pdf',
     ODF_SPREADSHEET = 'application/vnd.oasis.opendocument.spreadsheet',
     XLSX_SPREADSHEET = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    XML = 'application/xml',
     JPEG = 'image/jpeg',
     PNG = 'image/png',
-    CSV = 'text/csv',
-    DEPRECATED_MIME_FOR_XML = 'text/xml'
+    CSV = 'text/csv'
 }
 
 export enum UNTDID_1153 {

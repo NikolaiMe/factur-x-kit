@@ -11,7 +11,7 @@ import {
 } from '../profiles/basicwithoutlines/index';
 import { ComfortProfile, isComfortProfile } from '../profiles/comfort/ComfortProfile';
 import { ComfortProfileConverter } from '../profiles/comfort/ComfortProfileConverter';
-import { validationResult } from '../profiles/convert';
+import { checkResult } from '../profiles/convert';
 import { ExtendedProfile, ExtendedProfileConverter, isExtendedProfile } from '../profiles/extended';
 import { MinimumProfile, MinimumProfileConverter, isMinimumProfile } from '../profiles/minimum/index';
 import FacturXPdf from './pdf';
@@ -48,14 +48,14 @@ export class FacturX {
     /**
      * Validates the internal TypeScript data of this instance.
      *
-     * @returns A validation result for the current profile structure
+     * @returns A validation result for the current profile structure - IMPORTANT: This does not validate the XML structure, only the TypeScript data structure. Please use factur-x-kit-validator library for XML validation.
      */
-    public checkObject(): validationResult {
+    public checkObject(): checkResult {
         return this.converter.validateProfile(this.profile);
     }
 
     /** @deprecated Use `checkObject()` to validate TypeScript data structures. */
-    public validate(): validationResult {
+    public validate(): checkResult {
         return this.checkObject();
     }
 
@@ -242,7 +242,7 @@ export class FacturX {
      * @param data - The invoice data object to check
      * @returns A validation result indicating whether required properties are present
      */
-    public static checkObject(data: object): validationResult {
+    public static checkObject(data: object): checkResult {
         if (isExtendedProfile(data)) return new ExtendedProfileConverter().validateProfile(data);
         if (isComfortProfile(data)) return new ComfortProfileConverter().validateProfile(data);
         if (isBasicProfile(data)) return new BasicProfileConverter().validateProfile(data);

@@ -1,27 +1,42 @@
 # CHANGELOG
 
+## [0.4.0] - 2026-09-xx
+
+### Changed
+
+- Adapted and exported `calculateValues` from totalsCalculator to allow using the calculation not only in factur-x-kit but also e.g. in UIs
+- Replaced `FacturX.validate()` with `FacturX.checkObject()` to make clear that factur-x-kit does no official validation `FacturX.validate()` is marked as deprecated and will just call `FacturX.checkObject()`.
+    - If you want to do official validation please use [factur-x-kit-validator](https://www.npmjs.com/package/factur-x-kit)
+- Updated datatypes to be compliant with fatur-x 1.09.2/ZUGFeRD 2.5.2
+
+## [0.3.2] - 2026-07-31
+
+### Changed
+
+- Dependency updates
+
 ## [0.3.1] - 2025-12-24
 
 ### Changed
 
--   Exporting some types and zod schemes from easyInputType for easier data-validation and typing.
-    -   zTotalsCalculatorInputType,
-    -   zSimpleTradeLineItem
-    -   SimpleTradeLineItem
+- Exporting some types and zod schemes from easyInputType for easier data-validation and typing.
+    - zTotalsCalculatorInputType,
+    - zSimpleTradeLineItem
+    - SimpleTradeLineItem
 
 ## [0.3.0] - 2025-12-17
 
 ### Changed
 
--   Updated Codelists to fit to latestst Factur-X/ZUGFeRD specification 'FACTUR-X 1.08'.
--   Updated SCHEMATRON and XSD to test against latest Factur-X version 'FACTUR-X 1.08'.
--   **BREAKING** Added new business rules 'CII-SR' to comply with the latest SCHEMATRON schemes.
--   Added new business rules BR-B, because they are described in latest schematron. Not used until now, as the TaxCode which is checked here is not yet introduced to Factur-X Codes.
+- Updated Codelists to fit to latestst Factur-X/ZUGFeRD specification 'FACTUR-X 1.08'.
+- Updated SCHEMATRON and XSD to test against latest Factur-X version 'FACTUR-X 1.08'.
+- **BREAKING** Added new business rules 'CII-SR' to comply with the latest SCHEMATRON schemes.
+- Added new business rules BR-B, because they are described in latest schematron. Not used until now, as the TaxCode which is checked here is not yet introduced to Factur-X Codes.
 
 ### Fixed
 
--   **BREAKING** Fixed attachmentBinaryObject. Until now it was not possible to write/read the Base64 Data which should be integrated via this tag. Now the new attribute 'base64Data' was added, to allow writing and reading here.
--   Fixed test objects to ensure that they pass the new CII-SR Rules and that they comply to the fix mentioned above.
+- **BREAKING** Fixed attachmentBinaryObject. Until now it was not possible to write/read the Base64 Data which should be integrated via this tag. Now the new attribute 'base64Data' was added, to allow writing and reading here.
+- Fixed test objects to ensure that they pass the new CII-SR Rules and that they comply to the fix mentioned above.
 
 ### Migration Guide
 
@@ -85,7 +100,7 @@ Most likely you didn't use this feature, yet. Because it was not working properl
 
 ### Changed
 
--   **BREAKING:** The header image for the pdf is now not a string anymore but a Uint8Array. Therefore we don't rely on the fs.readFile function anymore, which is not supported in browser.
+- **BREAKING:** The header image for the pdf is now not a string anymore but a Uint8Array. Therefore we don't rely on the fs.readFile function anymore, which is not supported in browser.
 
 ### Migration Guide
 
@@ -141,15 +156,15 @@ If you used the function you need to convert the imagePath you used until now, i
 
 ### Fixed
 
--   Fixes ESM build compatibility issue by removing the CJS-specific import from pdf-lib/cjs/core/embedders/FileEmbedder in /core/pdf (Thanks to [ahelmberger](https://github.com/ahelmberger) for finding and fixing the issue)
+- Fixes ESM build compatibility issue by removing the CJS-specific import from pdf-lib/cjs/core/embedders/FileEmbedder in /core/pdf (Thanks to [ahelmberger](https://github.com/ahelmberger) for finding and fixing the issue)
 
 ### Added
 
--   This Changelog
+- This Changelog
 
 ## [0.1.5] - 2025-09-02
 
 ### Changed
 
--   Updated Codelists to fit to latestst Factur-X/ZUGFeRD specification 'FACTUR-X 1.07.3'
--   Updated XSDs and SCHEMATRONs to fit to lastst Factur-X/ZUGFeRD specification 'FACTUR-X 1.07.3'
+- Updated Codelists to fit to latestst Factur-X/ZUGFeRD specification 'FACTUR-X 1.07.3'
+- Updated XSDs and SCHEMATRONs to fit to lastst Factur-X/ZUGFeRD specification 'FACTUR-X 1.07.3'

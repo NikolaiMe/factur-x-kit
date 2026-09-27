@@ -4,8 +4,8 @@
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/NikolaiMe/factur-x-kit)
 [![NPM version](https://img.shields.io/npm/v/factur-x-kit.svg?style=flat-square)](https://www.npmjs.org/package/factur-x-kit)
 
-[![Factur-X Version 1.08](https://img.shields.io/badge/factur--X_version-1.08-ED3C44?labelColor=192444)](https://fnfe-mpe.org/factur-x/factur-x_en/)
-[![ZUGFeRD Version 2.4](https://img.shields.io/badge/ZUGFeRD_version-2.4-138ECC?labelColor=B7BE2A)](https://www.ferd-net.de/standards/zugferd)
+[![Factur-X Version 1.09.2](https://img.shields.io/badge/factur--X_version-1.09.2-ED3C44?labelColor=192444)](https://fnfe-mpe.org/factur-x/factur-x_en/)
+[![ZUGFeRD Version 2.5.2](https://img.shields.io/badge/ZUGFeRD_version-2.5.2-138ECC?labelColor=B7BE2A)](https://www.ferd-net.de/standards/zugferd)
 
 An all-in-one library for Hybrid Invoice Documents (Factur-X / ZUGFeRD) for JavaScript/TypeScript. Built by developers, for developers. You don't need to be an e-invoice expert to use it; so this documentation also provides some helpful information about ZUGFeRD/Factur-X basics.
 
@@ -372,7 +372,9 @@ console.log(facturX.object);
 
 ### Validate Invoices
 
-factur-x-kit helps you validate Factur-X invoices. It checks both: the data structure (Is every mandatory field available?) and the content (is the datatype of every key correct? Are all business-rules met?).
+> **Important note**<br/>This library does not perform a proper xml validation after you created your invoice. This keeps the library lightweight. Nevertheless a true XML validation against the official Factur-X rulesets must be performed to make sure your created invoice is legally compliant. To perform a proper validation you can use the library [factur-x-kit-validator](https://www.npmjs.com/package/factur-x-kit-validator).
+
+Although factur-x-kit does not perform a real validation, it helps you to check the data of your Factur-X invoices before you create an invoice. It checks both: the data structure (Is every mandatory field available?) and the content (is the datatype of every key correct? Are all business-rules met?).
 
 It is highly recommended to do a manual check of your data before creating the final Factur-X invoice. factur-x-kit will not build a Factur-X invoice where data is missing or wrong. It will throw an error instead, giving you a hint about which data is wrong.
 
@@ -380,17 +382,17 @@ You can do a manual check of your data by calling the following function:
 
 ```typescript
 const instance = await FacturX.fromObject(data);
-const validationResult = instance.validate();
+const checkResult = instance.checkObject();
 
-if (!validationResult.valid) {
-    console.log(validationResult.errors);
+if (!checkResult.valid) {
+    console.log(checkResult.errors);
 }
 ```
 
 The return value is structured like this.
 
 ```typescript
-interface validationResult {
+interface checkResult {
     valid: boolean;
     errors?: { message: string; path: (string | number)[] }[];
 }
@@ -398,9 +400,7 @@ interface validationResult {
 
 When you call `FacturX.fromObject`, `FacturX.fromPDF`, or `FacturX.fromXML`, the data already needs to have the correct structure. If there are mandatory fields missing, the profile won't be identified properly, and therefore factur-x-kit will throw an error. The business-rules (whether all data was calculated properly...) won't be checked when you create a factur-x-kit instance but will be checked before you try to export the final Factur-X invoice.
 
-In current state of factur-x-kit the PDF/A-3 conformance is **not** checked if you call `facturX.validate()`
-
-> **Attention!**<br>Validation is performed on the object level before it is parsed to XML. The big advantage of this approach is that it has a much better performance; the downside is that there can be issues in the conversion. In general this library is tested against the official XSD and SCHEMATRON files, provided with the Factur-X documentation, but not every invoice will be checked against those.
+In current state of factur-x-kit the PDF/A-3 conformance is **not** checked if you call `facturX.checkObject()`
 
 ## Disclaimer
 

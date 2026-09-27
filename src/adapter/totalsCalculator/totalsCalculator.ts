@@ -342,10 +342,8 @@ export interface CalculatedValues {
 }
 
 export function calculateValues(input: CalculationOnlyInputType): CalculatedValues {
-    // 1. ZUERST die einzelnen Zeilen berechnen (hier entsteht das lineTotals.netTotal pro Zeile!)
     const tradeLineItems = input.invoiceLines.map(createComfortTradeLineItemFromSimpleInput);
 
-    // 2. Dann diese berechneten Zeilen für die Gesamtsummen nutzen
     const netSumWithoutAllowancesAndCharges = calculateNetSumWithoutAllowancesAndCharges(tradeLineItems);
     const documentLevelAllowancesAndCharges = createDocumentLevelAllowancesAndCharges(
         input.totals?.documentLevelAllowancesAndCharges

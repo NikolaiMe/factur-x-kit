@@ -40,7 +40,7 @@ import { BR_O } from '../businessRules/br_o';
 import { BR_OWN } from '../businessRules/br_own';
 import { BR_S } from '../businessRules/br_s';
 import { BR_Z } from '../businessRules/br_z';
-import { validationResult } from '../convert';
+import { checkResult } from '../convert';
 
 export const ZTradePartyType = z.object({
     id: ZIdType.optional(), // in seller this could be an array
@@ -179,7 +179,7 @@ export function isBasicWithoutLinesProfile(data: unknown): data is BasicWithoutL
     return ZBasicWithoutLinesProfileStructure.safeParse(data).success;
 }
 
-export function isValidBasicWithoutLinesProfile(data: unknown): validationResult {
+export function isValidBasicWithoutLinesProfile(data: unknown): checkResult {
     const result = ZBasicWithoutLinesProfile.safeParse(data);
     if (!result.success) {
         return {
